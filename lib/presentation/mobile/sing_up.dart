@@ -58,19 +58,26 @@ class _SingUpState extends State<SingUp> {
             TextFormField(
               obscureText: isObscure,
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.lock),
-                  border: const OutlineInputBorder(),
-                  label: const Text('Пароль'),
-                  suffixIcon: InkWell(
-                    onHover: (value) {
-                      setState(() {
-                        isObscure = !isObscure;
-                      });
-                    },
-                    onTap: () {},
-                    child: Icon(
-                        isObscure ? Icons.visibility_off : Icons.visibility),
-                  )),
+                prefixIcon: Icon(Icons.lock),
+                suffixIcon: GestureDetector(
+                  onLongPressUp: () { 
+                    setState(() {
+                      isObscure = true;
+                    });
+                  },
+                  onLongPress: () {
+                    setState(() {
+                      isObscure = false;
+                    });
+                  },
+                  onTap: () {},
+                  child: isObscure
+                      ? const Icon(Icons.visibility_off)
+                      : const Icon(Icons.visibility),
+                ),
+                border: const OutlineInputBorder(),
+                label: const Text('Пароль'),
+              ),
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 7.5)),
             Container(
