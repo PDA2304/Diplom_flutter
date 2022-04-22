@@ -19,7 +19,7 @@ class Application extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       onGenerateRoute: router.generateRouter,
-      home: Scaffold(),
+      home: const SingIn(),
     );
   }
 }
