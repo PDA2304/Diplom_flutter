@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passmanager_diplom/constant/url_pages.dart';
 
 class SingIn extends StatefulWidget {
   const SingIn({Key? key}) : super(key: key);
@@ -99,7 +100,7 @@ class _SingInState extends State<SingIn> {
               height: 35,
               width: 250,
               child: TextButton(
-                onPressed: () => print('Регистрация пользователя'),
+                onPressed: () => Navigator.pushNamed(context, singUp),
                 child: const Text(
                   'Регистрация',
                   style: TextStyle(fontSize: 16),

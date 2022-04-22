@@ -10,6 +10,10 @@ class AppRouter {
         {
           return MaterialPageRoute(builder: (_) => const SingIn());
         }
+      case singUp:
+        {
+          return MaterialPageRoute(builder: (_) => const SingUp());
+        }
     }
     return null;
   }
