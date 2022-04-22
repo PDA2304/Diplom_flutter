@@ -20,7 +20,7 @@ class _SingUpState extends State<SingUp> {
         leading: IconButton(
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(
-                context, singIn, (route) => false);
+                context, UrlPage.singIn, (route) => false);
           },
           icon: const Icon(
             Icons.arrow_back,
@@ -86,7 +86,7 @@ class _SingUpState extends State<SingUp> {
                           MaterialStateProperty.all<Color>(Colors.white),
                     ),
                     onPressed: () {
-                      print('Подтверждение пароля');
+                      Navigator.pushNamed(context, UrlPage.confirmation);
                     },
                     child: const Text(
                       'Зарегистрироваться',

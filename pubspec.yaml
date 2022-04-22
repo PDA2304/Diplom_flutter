@@ -38,6 +38,7 @@ dependencies:
   freezed: ^2.0.0
   build_runner: ^2.1.10
   freezed_annotation: ^2.0.0
+  pinput: ^1.2.2
 
 dev_dependencies:
   flutter_test:
