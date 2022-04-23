@@ -1,7 +1,7 @@
 class ValidationAuth {
-  final String userName;
-  final String login;
-  final String password;
+  final String? userName;
+  final String? login;
+  final String? password;
 
   ValidationAuth({
     required this.userName,

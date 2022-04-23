@@ -1,9 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
 import 'package:passmanager_diplom/data/api/service/sunrice_service.dart';
+import 'package:passmanager_diplom/data/mapper/confirmation_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/user_mapper.dart';
+import 'package:passmanager_diplom/domain/model/confirmation.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 
 class ApiUtil {
@@ -33,9 +34,14 @@ class ApiUtil {
     return UserMapper.fropApi(result);
   }
 
-  Future<String> confirmation(String login) async {
-    final request = RequestConfirmation(login);
+  Future<Confirmation> confirmation({
+    required String userName,
+    required String login,
+    required String password,
+  }) async {
+    final request = RequestConfirmation(
+        userName: userName, login: login, password: password);
     var result = await _sunriseService.confirmation(request);
-    return result;
+    return ConfirmationMapper.fropApi(confirmation: result, user: request);
   }
 }

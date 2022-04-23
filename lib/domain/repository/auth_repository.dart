@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+import 'package:passmanager_diplom/domain/model/confirmation.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 
 abstract class AuthRepository {
@@ -13,5 +13,9 @@ abstract class AuthRepository {
     required String password,
   });
 
-  Future<String> confirmation(String login);
+  Future<Confirmation> confirmation({
+    required String userName,
+    required String login,
+    required String password,
+  });
 }

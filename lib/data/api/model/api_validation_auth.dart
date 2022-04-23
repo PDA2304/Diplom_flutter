@@ -4,7 +4,7 @@ class ApiValidationAuth {
   final List<dynamic>? password;
 
   ApiValidationAuth.fromApi(Map<String, dynamic> json)
-      : userName = json['error']['user_name'] ?? <String>[],
-        login = json['error']['login'] ?? <String>[],
-        password = json['error']['password'] ?? <String>[];
+      : userName = json['user_name'] ?? <dynamic>[],
+        login = json['login'] ?? <dynamic>[],
+        password = json['password'] ?? <dynamic>[];
 }

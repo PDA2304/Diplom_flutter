@@ -1,11 +1,19 @@
-import 'package:flutter/cupertino.dart';
-
 class RequestConfirmation {
+  final String userName;
   final String login;
+  final String password;
 
-  RequestConfirmation(@required this.login);
+  RequestConfirmation({
+    required this.userName,
+    required this.login,
+    required this.password,
+  });
 
   Map<String, dynamic> toApi() {
-    return {'login': login};
+    return {
+      'user_name': userName,
+      'login': login,
+      'password': password,
+    };
   }
 }

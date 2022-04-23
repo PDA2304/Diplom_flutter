@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:passmanager_diplom/data/api/model/api_confirmation.dart';
 import 'package:passmanager_diplom/data/api/model/api_user.dart';
-import 'package:passmanager_diplom/data/api/model/api_validation_auth.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
-import 'package:passmanager_diplom/domain/model/user.dart';
 
 class SunriseService {
   static const _BASE_URL = 'http://192.168.157.128:8888/api/';
@@ -31,8 +29,13 @@ class SunriseService {
     }
   }
 
-  Future<String> confirmation(RequestConfirmation request) async {
-    final response = await _dio.post('confirmation', data: request);
-    return ApiConfirmation.fromApi(response.data).number;
+  Future<ApiConfirmation> confirmation(RequestConfirmation request) async {
+    try {
+      final response = await _dio.post('confirmation', data: request.toApi());
+      return ApiConfirmation.fromApi(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) return ApiConfirmation.fromApi(e.response!.data);
+      return ApiConfirmation.fromApi({'number': 0});
+    }
   }
 }

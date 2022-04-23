@@ -1,4 +1,5 @@
 import 'package:passmanager_diplom/data/api/api_util.dart';
+import 'package:passmanager_diplom/domain/model/confirmation.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/repository/auth_repository.dart';
 
@@ -28,7 +29,15 @@ class AuthDataRepository extends AuthRepository {
   }
 
   @override
-  Future<String> confirmation(String login) {
-    return _apiUtil.confirmation(login);
+  Future<Confirmation> confirmation({
+    required String userName,
+    required String login,
+    required String password,
+  }) {
+    return _apiUtil.confirmation(
+      userName: userName,
+      login: login,
+      password: password,
+    );
   }
 }

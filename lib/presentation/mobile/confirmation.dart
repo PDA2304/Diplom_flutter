@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
+import 'package:passmanager_diplom/domain/model/confirmation.dart'
+    as modelConfirmaion;
 import 'package:pinput/pin_put/pin_put.dart';
 
 class Confirmation extends StatefulWidget {
-  const Confirmation({Key? key}) : super(key: key);
+  final modelConfirmaion.Confirmation confirmation;
+
+  const Confirmation({Key? key, required this.confirmation}) : super(key: key);
 
   @override
-  State<Confirmation> createState() => _ConfirmationState();
+  State<Confirmation> createState() =>
+      _ConfirmationState(confirmation: confirmation);
 }
 
 class _ConfirmationState extends State<Confirmation> {
-  TextEditingController _pinPutController = TextEditingController();
+  final modelConfirmaion.Confirmation confirmation;
+  final TextEditingController _pinPutController = TextEditingController();
+
+  _ConfirmationState({required this.confirmation});
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +45,8 @@ class _ConfirmationState extends State<Confirmation> {
               padding: const EdgeInsets.only(left: 15.0, right: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     "Подтверждение регистрации",
                     style: TextStyle(
                       fontSize: 24,
@@ -46,12 +54,12 @@ class _ConfirmationState extends State<Confirmation> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  Padding(padding: EdgeInsets.all(10)),
+                  const Padding(padding: EdgeInsets.all(10)),
                   Center(
                     child: Text(
-                      'На ващу почту  был выслан код подтверждения. Введите его в форму для подтверждении регистрации.',
+                      'На ващу почту ${confirmation.login} был выслан код подтверждения. Введите его в форму для подтверждении регистрации.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),
