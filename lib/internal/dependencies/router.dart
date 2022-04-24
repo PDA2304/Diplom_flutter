@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart'
     as ModelConfirmation;
+import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
 import 'package:passmanager_diplom/presentation/mobile/confirmation.dart';
@@ -15,7 +16,14 @@ class AppRouter {
     switch (settings.name) {
       case UrlPage.singIn:
         {
-          return MaterialPageRoute(builder: (_) => const SingIn());
+          return MaterialPageRoute(
+              builder: (_) => BlocProvider(
+                    create: (_) => SingInCubit(
+                      RepositoryModule.authRepository(),
+                      RepositoryModule.crudRepository(),
+                    ),
+                    child: const SingIn(),
+                  ));
         }
       case UrlPage.singUp:
         {
