@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart'
     as modelConfirmaion;
+import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 
 class Confirmation extends StatefulWidget {
@@ -73,7 +74,22 @@ class _ConfirmationState extends State<Confirmation> {
               height: 45,
               child: PinPut(
                 fieldsCount: 5,
-                onSubmit: (String pin) {},
+                onSubmit: (String pin) {
+                  if (pin == confirmation.number.toString()) {
+                    RepositoryModule.authRepository()
+                        .singUp(
+                            userName: confirmation.userName,
+                            login: confirmation.login,
+                            password: confirmation.password)
+                        .then((value) {
+                      RepositoryModule.crudRepository().create(user: value);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, UrlPage.home, (route) => false);
+                    });
+                  } else {
+                    _showSnackBar(context);
+                  }
+                },
                 focusNode: FocusNode(),
                 keyboardType: TextInputType.phone,
                 controller: _pinPutController,
@@ -95,5 +111,24 @@ class _ConfirmationState extends State<Confirmation> {
         );
       }),
     );
+  }
+
+  void _showSnackBar(BuildContext context) {
+    const snackBar = SnackBar(
+      duration: Duration(seconds: 3),
+      content: SizedBox(
+        height: 40.0,
+        child: Center(
+          child: Text(
+            'Код не совпадает',
+            style: TextStyle(fontSize: 25.0, color: Colors.black),
+          ),
+        ),
+      ),
+      backgroundColor: Colors.white,
+    );
+    Scaffold.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 }

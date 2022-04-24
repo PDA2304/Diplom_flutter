@@ -10,5 +10,12 @@ class ApiUser {
       : id = json['id'] ?? 0,
         userName = json['user_name'] ?? '',
         email = json['login'] ?? '',
-        validAuth = ApiValidationAuth.fromApi(json);
+        validAuth = ApiValidationAuth.fromApi(
+          json['error'] ??
+              {
+                'login': null,
+                'user_name': null,
+                'password': null,
+              },
+        );
 }

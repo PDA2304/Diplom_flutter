@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/validation_auth.dart';
-import 'package:passmanager_diplom/domain/state/cubit/sing_up_cubit.dart';
+import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
 
 class SingUp extends StatefulWidget {
   const SingUp({Key? key}) : super(key: key);

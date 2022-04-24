@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart'
     as ModelConfirmation;
-import 'package:passmanager_diplom/domain/state/cubit/sing_up_cubit.dart';
+import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
 import 'package:passmanager_diplom/presentation/mobile/confirmation.dart';
+import 'package:passmanager_diplom/presentation/mobile/home.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_in.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_up.dart';
 
@@ -31,6 +32,10 @@ class AppRouter {
               settings.arguments as ModelConfirmation.Confirmation;
           return MaterialPageRoute(
               builder: (_) => Confirmation(confirmation: confirmation));
+        }
+      case UrlPage.home:
+        {
+          return MaterialPageRoute(builder: (_) => const Home());
         }
     }
     return null;

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:passmanager_diplom/constant/url_pages.dart';
+import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/internal/dependencies/router.dart';
-import 'package:passmanager_diplom/presentation/mobile/sing_in.dart';
 
 class Application extends StatelessWidget {
+  final User user;
+
   const Application({
     Key? key,
     required this.router,
+    required this.user,
   }) : super(key: key);
   final AppRouter router;
 
@@ -19,7 +23,7 @@ class Application extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       onGenerateRoute: router.generateRouter,
-      home: const SingIn(),
+      initialRoute: user.id == 0 ? UrlPage.singIn : UrlPage.home,
     );
   }
 }
