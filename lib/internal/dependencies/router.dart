@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart'
     as ModelConfirmation;
+import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
@@ -12,6 +13,10 @@ import 'package:passmanager_diplom/presentation/mobile/sing_in.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_up.dart';
 
 class AppRouter {
+  final User userAuth;
+
+  AppRouter({required this.userAuth});
+
   Route<dynamic>? generateRouter(RouteSettings settings) {
     switch (settings.name) {
       case UrlPage.singIn:
@@ -43,7 +48,15 @@ class AppRouter {
         }
       case UrlPage.home:
         {
-          return MaterialPageRoute(builder: (_) => const Home());
+          var user = settings.arguments == null
+              ? userAuth
+              : settings.arguments as User;
+          return MaterialPageRoute(
+            
+            builder: (_) => Home(
+              user: user,
+            ),
+          );
         }
     }
     return null;

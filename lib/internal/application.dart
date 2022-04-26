@@ -4,12 +4,12 @@ import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/internal/dependencies/router.dart';
 
 class Application extends StatelessWidget {
-  final User user;
+  final bool isAuth;
 
   const Application({
     Key? key,
     required this.router,
-    required this.user,
+    required this.isAuth,
   }) : super(key: key);
   final AppRouter router;
 
@@ -23,7 +23,7 @@ class Application extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       onGenerateRoute: router.generateRouter,
-      initialRoute: user.id == 0 ? UrlPage.singIn : UrlPage.home,
+      initialRoute: isAuth ? UrlPage.singIn : UrlPage.home,
     );
   }
 }

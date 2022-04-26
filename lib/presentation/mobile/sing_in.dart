@@ -34,7 +34,11 @@ class _SingInState extends State<SingIn> {
               if (state is SingInResponce) {
                 if (state.isSucces) {
                   Navigator.pushNamedAndRemoveUntil(
-                      context, UrlPage.home, (route) => false);
+                    context,
+                    UrlPage.home,
+                    (route) => false,
+                    arguments: state.user,
+                  );
                 }
                 _validationAuth = state.user.validationAuth;
                 if (_formKey.currentState!.validate()) {}

@@ -25,7 +25,8 @@ class SunriseService {
       final reponse = await _dio.post('sing_in', data: request.toApi());
       return ApiUser.fromApi(reponse.data);
     } on DioError catch (e) {
-      return ApiUser.fromApi(e.response!.data);
+      if (e.response != null) return ApiUser.fromApi(e.response!.data);
+      return ApiUser.fromApi({});
     }
   }
 

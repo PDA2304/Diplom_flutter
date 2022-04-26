@@ -6,6 +6,5 @@ import 'package:passmanager_diplom/internal/dependencies/router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var user = await RepositoryModule.crudRepository().read();
-
-  runApp(Application(router: AppRouter(), user: user));
+  runApp(Application(router: AppRouter(userAuth: user), isAuth: user.id == 0));
 }
