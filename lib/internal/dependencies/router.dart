@@ -7,8 +7,12 @@ import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
+import 'package:passmanager_diplom/presentation/mobile/accounts.dart';
 import 'package:passmanager_diplom/presentation/mobile/confirmation.dart';
+import 'package:passmanager_diplom/presentation/mobile/files.dart';
 import 'package:passmanager_diplom/presentation/mobile/home.dart';
+import 'package:passmanager_diplom/presentation/mobile/notes.dart';
+import 'package:passmanager_diplom/presentation/mobile/settings.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_in.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_up.dart';
 
@@ -52,10 +56,42 @@ class AppRouter {
               ? userAuth
               : settings.arguments as User;
           return MaterialPageRoute(
-            
             builder: (_) => Home(
               user: user,
             ),
+          );
+        }
+      case UrlPage.account:
+        {
+          var user = settings.arguments as User;
+          return MaterialPageRoute(
+            builder: (_) => Accounts(
+              user: user,
+            ),
+          );
+        }
+      case UrlPage.notes:
+        {
+          var user = settings.arguments as User;
+          return MaterialPageRoute(
+            builder: (_) => Notes(
+              user: user,
+            ),
+          );
+        }
+      case UrlPage.files:
+        {
+          var user = settings.arguments as User;
+          return MaterialPageRoute(
+            builder: (_) => Files(
+              user: user,
+            ),
+          );
+        }
+      case UrlPage.settings:
+        {
+          return MaterialPageRoute(
+            builder: (_) => const Settings(),
           );
         }
     }

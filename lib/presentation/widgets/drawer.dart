@@ -68,7 +68,8 @@ class AppDrawer extends StatelessWidget {
                   child: Container(
                     alignment: Alignment.centerRight,
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () =>
+                          Navigator.pushNamed(context, UrlPage.settings),
                       child: const Icon(
                         Icons.settings,
                         color: Colors.blue,
@@ -86,22 +87,34 @@ class AppDrawer extends StatelessWidget {
           itemDrawer(
             title: 'Все записи',
             icon: Icons.all_inbox,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, UrlPage.home,
+                  arguments: user);
+            },
           ),
           itemDrawer(
             title: 'Аккаунты',
             icon: Icons.account_box,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, UrlPage.account,
+                  arguments: user);
+            },
           ),
           itemDrawer(
             title: 'Заметки',
             icon: Icons.note_sharp,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, UrlPage.notes,
+                  arguments: user);
+            },
           ),
           itemDrawer(
             title: 'Файлы',
             icon: Icons.file_copy,
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacementNamed(context, UrlPage.files,
+                  arguments: user);
+            },
           ),
           Expanded(flex: 1, child: Container()),
           itemDrawer(
