@@ -7,4 +7,7 @@ abstract class UrlPage {
   static const String notes = '/notes';
   static const String files = '/files';
   static const String settings = '/settings';
+  static const String accountAdd = '/account/add';
+  static const String notesAdd = '/notes/add';
+  static const String filesAdd = '/files/add';
 }

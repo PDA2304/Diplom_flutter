@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passmanager_diplom/constant/url_pages.dart';
 
 class FloatingActionButtonCutom extends StatefulWidget {
   const FloatingActionButtonCutom({Key? key}) : super(key: key);
@@ -19,15 +20,24 @@ class _FloatingActionButtonCutom extends State<FloatingActionButtonCutom> {
             children: [
               ListTile(
                 title: const Text('Аккаунты'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, UrlPage.accountAdd);
+                },
               ),
               ListTile(
                 title: const Text('Файл'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, UrlPage.filesAdd);
+                },
               ),
               ListTile(
                 title: const Text('Заметки'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, UrlPage.notesAdd);
+                },
               ),
             ],
           ),
