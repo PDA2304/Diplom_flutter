@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 
 class FloatingActionButtonCutom extends StatefulWidget {
-  const FloatingActionButtonCutom({Key? key}) : super(key: key);
+  const FloatingActionButtonCutom({Key? key, required this.userId})
+      : super(key: key);
+  final int userId;
 
   @override
   State<FloatingActionButtonCutom> createState() =>
@@ -36,7 +38,8 @@ class _FloatingActionButtonCutom extends State<FloatingActionButtonCutom> {
                 title: const Text('Заметки'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, UrlPage.notesAdd);
+                  Navigator.pushNamed(context, UrlPage.notesAdd,
+                      arguments: widget.userId);
                 },
               ),
             ],

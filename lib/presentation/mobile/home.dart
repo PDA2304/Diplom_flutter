@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
+import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/presentation/widgets/custom_search.dart';
 import 'package:passmanager_diplom/presentation/widgets/drawer.dart';
 import 'package:passmanager_diplom/presentation/widgets/floating_action_button_custuom.dart';
@@ -13,6 +15,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    context.read<DataCubit>().initData(widget.user.id);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +41,23 @@ class _HomeState extends State<Home> {
       drawer: AppDrawer(
         user: widget.user,
       ),
-      floatingActionButton: const FloatingActionButtonCutom(),
-      body: Container(),
+      floatingActionButton: FloatingActionButtonCutom(userId: widget.user.id),
+      body: BlocBuilder<DataCubit, DataState>(
+        builder: (context, state) {
+          return ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, count) {
+                return Card(
+                  child: ListTile(
+                      onLongPress: () {},
+                      onTap: () {},
+                      title: Text('Название'),
+                      subtitle: Text('23 апреля 2022'),
+                      trailing: const Icon(Icons.keyboard_arrow_right)),
+                );
+              });
+        },
+      ),
     );
   }
 }

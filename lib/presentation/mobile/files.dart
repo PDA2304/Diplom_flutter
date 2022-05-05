@@ -29,10 +29,9 @@ class _FilesState extends State<Files> {
             },
             icon: const Icon(Icons.search),
           )
-        
         ],
       ),
-      floatingActionButton: const FloatingActionButtonCutom(),
+      floatingActionButton: FloatingActionButtonCutom(userId: widget.user.id),
       drawer: AppDrawer(user: widget.user),
       body: Container(),
     );

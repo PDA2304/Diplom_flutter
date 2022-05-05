@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:passmanager_diplom/data/api/model/api_confirmation.dart';
+import 'package:passmanager_diplom/data/api/model/api_notes.dart';
+import 'package:passmanager_diplom/data/api/model/api_notes_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_user.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
+import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
+import 'package:passmanager_diplom/data/api/request/request_notes_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
 
@@ -37,6 +41,35 @@ class SunriseService {
     } on DioError catch (e) {
       if (e.response != null) return ApiConfirmation.fromApi(e.response!.data);
       return ApiConfirmation.fromApi({'number': 0});
+    }
+  }
+
+  Future<ApiNotes> notesCreate(RequestNotesCreate request) async {
+    try {
+      final response = await _dio.post('notes', data: request.toApi());
+      return ApiNotes.fromApi(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) return ApiNotes.fromApi(e.response!.data);
+      return ApiNotes.fromApi({});
+    }
+  }
+
+  Future<List<ApiNotes>> notesIndex({required int userId}) async {
+    try {
+      final reponse = await _dio.get('notes/user/$userId');
+      return ApiNotesList.fromApi(reponse.data).notesList;
+    } on DioError catch (e) {
+      return <ApiNotes>[];
+    }
+  }
+
+  Future<ApiNotes> notesUpdate({required RequestNotesUpdate request,required notesId}) async {
+    try {
+      final response = await _dio.put('notes/$notesId', data: request.toApi());
+      return ApiNotes.fromApi(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) return ApiNotes.fromApi(e.response!.data);
+      return ApiNotes.fromApi({});
     }
   }
 }

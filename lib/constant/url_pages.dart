@@ -10,4 +10,5 @@ abstract class UrlPage {
   static const String accountAdd = '/account/add';
   static const String notesAdd = '/notes/add';
   static const String filesAdd = '/files/add';
+  static const String notesShowUpdate = '/notesShowUpdate';
 }

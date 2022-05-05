@@ -51,8 +51,7 @@ class _SingInState extends State<SingIn> {
                     padding: EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       'Вход в PassManager',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -74,12 +73,8 @@ class _SingInState extends State<SingIn> {
                             height: 35,
                             child: TextButton(
                               style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.blue),
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
+                                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                               ),
                               onPressed: () => context
                                   .read<SingInCubit>()
@@ -96,8 +91,7 @@ class _SingInState extends State<SingIn> {
                     height: 35,
                     width: 250,
                     child: TextButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, UrlPage.singUp),
+                      onPressed: () => Navigator.pushNamed(context, UrlPage.singUp),
                       child: const Text(
                         'Регистрация',
                         style: TextStyle(fontSize: 16),
@@ -146,9 +140,7 @@ class _SingInState extends State<SingIn> {
                   });
                 },
                 onTap: () {},
-                child: _isObscure
-                    ? const Icon(Icons.visibility_off)
-                    : const Icon(Icons.visibility),
+                child: _isObscure ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
               ),
               border: const OutlineInputBorder(),
               label: const Text('Пароль'),

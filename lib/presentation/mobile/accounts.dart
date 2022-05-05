@@ -31,7 +31,7 @@ class _AccountsState extends State<Accounts> {
         ],
       ),
       drawer: AppDrawer(user: widget.user),
-      floatingActionButton: const FloatingActionButtonCutom(),
+      floatingActionButton: FloatingActionButtonCutom(userId: widget.user.id),
       body: const Center(child: Text('Аккаунты')),
     );
   }

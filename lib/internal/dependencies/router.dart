@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart'
     as ModelConfirmation;
+import 'package:passmanager_diplom/domain/model/notes.dart' as ModelNotes;
 import 'package:passmanager_diplom/domain/model/user.dart';
+import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
+import 'package:passmanager_diplom/domain/state/notes/notes_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
@@ -13,8 +16,9 @@ import 'package:passmanager_diplom/presentation/mobile/confirmation.dart';
 import 'package:passmanager_diplom/presentation/mobile/files.dart';
 import 'package:passmanager_diplom/presentation/mobile/files_add.dart';
 import 'package:passmanager_diplom/presentation/mobile/home.dart';
-import 'package:passmanager_diplom/presentation/mobile/notes.dart';
-import 'package:passmanager_diplom/presentation/mobile/notes_add.dart';
+import 'package:passmanager_diplom/presentation/mobile/notes/notes.dart';
+import 'package:passmanager_diplom/presentation/mobile/notes/notes_add.dart';
+import 'package:passmanager_diplom/presentation/mobile/notes/notest_show_update.dart';
 import 'package:passmanager_diplom/presentation/mobile/settings.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_in.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_up.dart';
@@ -23,6 +27,9 @@ class AppRouter {
   final User userAuth;
 
   AppRouter({required this.userAuth});
+
+  final DataCubit _dataCubit =
+      DataCubit(RepositoryModule.crudNotesRepository());
 
   Route<dynamic>? generateRouter(RouteSettings settings) {
     switch (settings.name) {
@@ -59,8 +66,11 @@ class AppRouter {
               ? userAuth
               : settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => Home(
-              user: user,
+            builder: (_) => BlocProvider.value(
+              value: _dataCubit,
+              child: Home(
+                user: user,
+              ),
             ),
           );
         }
@@ -68,8 +78,11 @@ class AppRouter {
         {
           var user = settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => Accounts(
-              user: user,
+            builder: (_) => BlocProvider.value(
+              value: _dataCubit,
+              child: Accounts(
+                user: user,
+              ),
             ),
           );
         }
@@ -77,8 +90,11 @@ class AppRouter {
         {
           var user = settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => Notes(
-              user: user,
+            builder: (_) => BlocProvider.value(
+              value: _dataCubit,
+              child: Notes(
+                user: user,
+              ),
             ),
           );
         }
@@ -86,8 +102,11 @@ class AppRouter {
         {
           var user = settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => Files(
-              user: user,
+            builder: (_) => BlocProvider.value(
+              value: _dataCubit,
+              child: Files(
+                user: user,
+              ),
             ),
           );
         }
@@ -111,8 +130,26 @@ class AppRouter {
         }
       case UrlPage.notesAdd:
         {
+          int userId = int.parse(settings.arguments.toString());
           return MaterialPageRoute(
-            builder: (_) => const NotesAdd(),
+            builder: (_) => BlocProvider(
+              create: (context) => NotesCubit(
+                _dataCubit,
+              ),
+              child: NotesAdd(userId: userId),
+            ),
+          );
+        }
+      case UrlPage.notesShowUpdate:
+        {
+          ModelNotes.Notes notes = settings.arguments as ModelNotes.Notes;
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (context) => NotesCubit(
+                _dataCubit,
+              ),
+              child: NotesShowUpdate(notes: notes),
+            ),
           );
         }
     }
