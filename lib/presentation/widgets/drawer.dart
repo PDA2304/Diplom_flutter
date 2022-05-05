@@ -120,6 +120,13 @@ class AppDrawer extends StatelessWidget {
                       arguments: user);
                 },
               ),
+              itemDrawer(
+                title: 'Козина',
+                icon: Icons.auto_delete_rounded,
+                onTap: () {
+                  Navigator.pushNamed(context, UrlPage.trash);
+                },
+              ),
               Expanded(flex: 1, child: Container()),
               itemDrawer(
                 title: 'Выход',

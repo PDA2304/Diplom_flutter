@@ -22,6 +22,7 @@ import 'package:passmanager_diplom/presentation/mobile/notes/notest_show_update.
 import 'package:passmanager_diplom/presentation/mobile/settings.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_in.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_up.dart';
+import 'package:passmanager_diplom/presentation/mobile/trash.dart';
 
 class AppRouter {
   final User userAuth;
@@ -114,6 +115,12 @@ class AppRouter {
         {
           return MaterialPageRoute(
             builder: (_) => const Settings(),
+          );
+        }
+      case UrlPage.trash:
+        {
+          return MaterialPageRoute(
+            builder: (_) => const Trash(),
           );
         }
       case UrlPage.accountAdd:
