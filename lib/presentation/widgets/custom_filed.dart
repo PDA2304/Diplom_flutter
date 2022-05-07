@@ -12,7 +12,7 @@ class CustomField extends StatefulWidget {
   CustomField({
     Key? key,
     this.isObscure = false,
-    this.controller,
+    required this.controller,
     required this.labelText,
     this.maxLength,
     this.minLines,

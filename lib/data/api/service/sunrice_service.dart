@@ -1,8 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:passmanager_diplom/data/api/model/api_account.dart';
+import 'package:passmanager_diplom/data/api/model/api_account_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_confirmation.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_user.dart';
+import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
+import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_update.dart';
@@ -56,20 +60,51 @@ class SunriseService {
 
   Future<List<ApiNotes>> notesIndex({required int userId}) async {
     try {
-      final reponse = await _dio.get('notes/user/$userId');
-      return ApiNotesList.fromApi(reponse.data).notesList;
+      final response = await _dio.get('notes/user/$userId');
+      return ApiNotesList.fromApi(response.data).notesList;
     } on DioError catch (e) {
       return <ApiNotes>[];
     }
   }
 
-  Future<ApiNotes> notesUpdate({required RequestNotesUpdate request,required notesId}) async {
+  Future<ApiNotes> notesUpdate(
+      {required RequestNotesUpdate request, required notesId}) async {
     try {
       final response = await _dio.put('notes/$notesId', data: request.toApi());
       return ApiNotes.fromApi(response.data);
     } on DioError catch (e) {
       if (e.response != null) return ApiNotes.fromApi(e.response!.data);
       return ApiNotes.fromApi({});
+    }
+  }
+
+  Future<ApiAccount> accountCreate(
+      {required RequestAccountCreate request}) async {
+    try {
+      final response = await _dio.post('account', data: request.toApi());
+      return ApiAccount.fromApi(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) return ApiAccount.fromApi(e.response!.data);
+      return ApiAccount.fromApi({});
+    }
+  }
+
+  Future<List<ApiAccount>> accountIndex({required int userId}) async {
+    try {
+      final response = await _dio.get('account/user/$userId');
+      return ApiAccountList.fromApi(response.data).accountList;
+    } on DioError catch (e) {
+      return <ApiAccount>[];
+    }
+  }
+
+  accountUpdate({required RequestAccountUpdate request}) async {
+    try {
+      final response = await _dio.put('account', data: request.toApi());
+      return ApiAccount.fromApi(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) return ApiAccount.fromApi(e.response!.data);
+      return ApiAccount.fromApi({});
     }
   }
 }

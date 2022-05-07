@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
+import 'package:passmanager_diplom/domain/model/account.dart' as ModelAccount;
 import 'package:passmanager_diplom/domain/model/confirmation.dart'
     as ModelConfirmation;
 import 'package:passmanager_diplom/domain/model/notes.dart' as ModelNotes;
 import 'package:passmanager_diplom/domain/model/user.dart';
+import 'package:passmanager_diplom/domain/state/account/account_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/domain/state/notes/notes_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
-import 'package:passmanager_diplom/presentation/mobile/account_add.dart';
-import 'package:passmanager_diplom/presentation/mobile/accounts.dart';
+import 'package:passmanager_diplom/presentation/mobile/account/account_add.dart';
+import 'package:passmanager_diplom/presentation/mobile/account/account_show_update.dart';
+import 'package:passmanager_diplom/presentation/mobile/account/account.dart';
 import 'package:passmanager_diplom/presentation/mobile/confirmation.dart';
 import 'package:passmanager_diplom/presentation/mobile/files.dart';
 import 'package:passmanager_diplom/presentation/mobile/files_add.dart';
 import 'package:passmanager_diplom/presentation/mobile/home.dart';
 import 'package:passmanager_diplom/presentation/mobile/notes/notes.dart';
 import 'package:passmanager_diplom/presentation/mobile/notes/notes_add.dart';
-import 'package:passmanager_diplom/presentation/mobile/notes/notest_show_update.dart';
+import 'package:passmanager_diplom/presentation/mobile/notes/notes_show_update.dart';
 import 'package:passmanager_diplom/presentation/mobile/settings.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_in.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_up.dart';
@@ -29,8 +32,10 @@ class AppRouter {
 
   AppRouter({required this.userAuth});
 
-  final DataCubit _dataCubit =
-      DataCubit(RepositoryModule.crudNotesRepository());
+  final DataCubit _dataCubit = DataCubit(
+    crudNotesRepository: RepositoryModule.crudNotesRepository(),
+    crudAccountRepository: RepositoryModule.crudAccountRepository(),
+  );
 
   Route<dynamic>? generateRouter(RouteSettings settings) {
     switch (settings.name) {
@@ -125,8 +130,14 @@ class AppRouter {
         }
       case UrlPage.accountAdd:
         {
+          int userId = int.parse(settings.arguments.toString());
           return MaterialPageRoute(
-            builder: (_) => const AccountAdd(),
+            builder: (_) => BlocProvider(
+              create: (context) => AccountCubit(
+                _dataCubit,
+              ),
+              child: AccountAdd(userId: userId),
+            ),
           );
         }
       case UrlPage.filesAdd:
@@ -158,6 +169,16 @@ class AppRouter {
               child: NotesShowUpdate(notes: notes),
             ),
           );
+        }
+      case UrlPage.accountShowUpdate:
+        {
+          ModelAccount.Account account =
+              settings.arguments as ModelAccount.Account;
+          return MaterialPageRoute(
+              builder: (_) => BlocProvider(
+                    create: (context) => AccountCubit(_dataCubit),
+                    child: AccountShowUpdate(account: account),
+                  ));
         }
     }
     return null;

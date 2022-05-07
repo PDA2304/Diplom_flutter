@@ -24,7 +24,8 @@ class _FloatingActionButtonCutom extends State<FloatingActionButtonCutom> {
                 title: const Text('Аккаунты'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, UrlPage.accountAdd);
+                  Navigator.pushNamed(context, UrlPage.accountAdd,
+                      arguments: widget.userId);
                 },
               ),
               ListTile(
