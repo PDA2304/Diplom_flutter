@@ -116,6 +116,32 @@ class DataCubit extends Cubit<DataState> {
     RepositoryModule.crudRepository().delete();
   }
 
+  void onDelete(TypeTable typeTable, int id) {
+    switch (typeTable) {
+      case TypeTable.notes:
+        {
+          _notesList.removeWhere((element) => element.id == id);
+          _dataList.removeWhere((element) =>
+              (element.id == id) && (element.typeTable == TypeTable.notes));
+          crudNotesRepository.logicDelete(id: id);
+          break;
+        }
+      case TypeTable.files:
+        {
+          break;
+        }
+      case TypeTable.account:
+        {
+          _accountList.removeWhere((element) => element.id == id);
+          _dataList.removeWhere((element) =>
+              (element.id == id) && (element.typeTable == TypeTable.account));
+          crudAccountRepository.logicDelete(id: id);
+          break;
+        }
+    }
+    emit(DataResponse(_notesList, _accountList, _dataList));
+  }
+
   Future onRefresh({
     required TypeTable typetable,
     required int userId,

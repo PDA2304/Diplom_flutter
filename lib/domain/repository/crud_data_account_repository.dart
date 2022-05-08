@@ -28,9 +28,8 @@ class CRUDDataAccountRepository extends CRUDAccountRepository {
   }
 
   @override
-  Future<Account> logicDelete() {
-    // TODO: implement logicDelete
-    throw UnimplementedError();
+  Future<Account> logicDelete({required int id}) {
+    return _apiUtil.accountDelete(id: id);
   }
 
   @override

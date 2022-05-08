@@ -92,6 +92,11 @@ class ApiUtil {
     return NotesMapper.fromApi(notes: result);
   }
 
+  Future<Notes> notesDelete({required int id}) async {
+    final result = await _sunriseService.notesDelete(id: id);
+    return NotesMapper.fromApi(notes: result);
+  }
+
   Future<Account> accountCreate({
     required String accountName,
     required String login,
@@ -129,6 +134,11 @@ class ApiUtil {
       description: description,
     );
     final result = await _sunriseService.accountUpdate(request: request);
+    return AccountMapper.fromApi(account: result);
+  }
+
+  Future<Account> accountDelete({required int id}) async {
+    final result = await _sunriseService.accountDelete(id: id);
     return AccountMapper.fromApi(account: result);
   }
 

@@ -26,9 +26,8 @@ class CRUDDataNotesRepository extends CRUDNotesRepository {
   }
 
   @override
-  Future<Notes> logicDelete() {
-    // TODO: implement logicDelete
-    throw UnimplementedError();
+  Future<Notes> logicDelete({required int id}) {
+    return _apiUtil.notesDelete(id: id);
   }
 
   @override

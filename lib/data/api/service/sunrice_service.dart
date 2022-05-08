@@ -79,6 +79,15 @@ class SunriseService {
     }
   }
 
+  Future<ApiNotes> notesDelete({required int id}) async {
+    try {
+      final response = await _dio.delete('/notes/logicDelete/$id');
+      return ApiNotes.fromApi(response.data);
+    } on DioError catch (e) {
+      return ApiNotes.fromApi({});
+    }
+  }
+
   Future<ApiAccount> accountCreate(
       {required RequestAccountCreate request}) async {
     try {
@@ -106,6 +115,15 @@ class SunriseService {
       return ApiAccount.fromApi(response.data);
     } on DioError catch (e) {
       if (e.response != null) return ApiAccount.fromApi(e.response!.data);
+      return ApiAccount.fromApi({});
+    }
+  }
+
+  Future<ApiAccount> accountDelete({required int id}) async {
+    try {
+      final response = await _dio.delete('account/logicDelete/$id');
+      return ApiAccount.fromApi(response.data);
+    } on DioError catch (e) {
       return ApiAccount.fromApi({});
     }
   }

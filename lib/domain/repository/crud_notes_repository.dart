@@ -14,5 +14,5 @@ abstract class CRUDNotesRepository {
     required String description,
   });
   Future<List<Notes>> index({required int userId});
-  Future<Notes> logicDelete();
+  Future<Notes> logicDelete({required int id});
 }

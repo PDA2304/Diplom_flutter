@@ -16,5 +16,5 @@ abstract class CRUDAccountRepository {
     required String description,
   });
   Future<List<Account>> index({required int userId});
-  Future<Account> logicDelete();
+  Future<Account> logicDelete({required int id});
 }
