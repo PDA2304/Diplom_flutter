@@ -111,6 +111,8 @@ class DataCubit extends Cubit<DataState> {
   void onExit() {
     isInit = false;
     _notesList.clear();
+    _dataList.clear();
+    _accountList.clear();
     RepositoryModule.crudRepository().delete();
   }
 
