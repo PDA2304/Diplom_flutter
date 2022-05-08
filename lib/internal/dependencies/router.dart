@@ -33,6 +33,7 @@ class AppRouter {
   AppRouter({required this.userAuth});
 
   final DataCubit _dataCubit = DataCubit(
+    dataRepository: RepositoryModule.dataRepository(),
     crudNotesRepository: RepositoryModule.crudNotesRepository(),
     crudAccountRepository: RepositoryModule.crudAccountRepository(),
   );

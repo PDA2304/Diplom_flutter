@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:passmanager_diplom/data/api/model/api_account.dart';
 import 'package:passmanager_diplom/data/api/model/api_account_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_confirmation.dart';
+import 'package:passmanager_diplom/data/api/model/api_data.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_user.dart';
@@ -106,6 +107,15 @@ class SunriseService {
     } on DioError catch (e) {
       if (e.response != null) return ApiAccount.fromApi(e.response!.data);
       return ApiAccount.fromApi({});
+    }
+  }
+
+  Future<List<ApiData>> dataIndex({required int userId}) async {
+    try {
+      final response = await _dio.get('data/$userId');
+      return ApiData.fromApiList(response.data);
+    } on DioError catch (e) {
+      return <ApiData>[];
     }
   }
 }

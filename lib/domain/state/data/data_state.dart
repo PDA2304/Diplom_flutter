@@ -2,26 +2,28 @@ part of 'data_cubit.dart';
 
 @immutable
 abstract class DataState {
+  final List<Data> dataList;
   final List<Notes> notesList;
   final List<Account> accountList;
 
-  DataState(this.notesList, this.accountList);
+  DataState(this.notesList, this.accountList, this.dataList);
 }
 
 class DataInitial extends DataState {
-  DataInitial(List<Notes> notesList, List<Account> accountList)
-      : super(notesList, accountList);
+  DataInitial(List<Notes> notesList, List<Account> accountList,List<Data> dataList)
+      : super(notesList, accountList,dataList);
 }
 
 class DataLoad extends DataState {
-  DataLoad(List<Notes> notesList, List<Account> accountList)
-      : super(notesList, accountList);
+  DataLoad(List<Notes> notesList, List<Account> accountList,List<Data> dataList)
+      : super(notesList, accountList,dataList);
 }
 
 class DataResponse extends DataState {
+  final List<Data> dataList;
   final List<Notes> notesList;
   final List<Account> accountList;
 
-  DataResponse(this.notesList, this.accountList)
-      : super(notesList, accountList);
+  DataResponse(this.notesList, this.accountList,this.dataList)
+      : super(notesList, accountList,dataList);
 }

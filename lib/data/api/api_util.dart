@@ -8,10 +8,12 @@ import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
 import 'package:passmanager_diplom/data/api/service/sunrice_service.dart';
 import 'package:passmanager_diplom/data/mapper/account_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/confirmation_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/data_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/notes_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/user_mapper.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart';
+import 'package:passmanager_diplom/domain/model/data.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 
@@ -128,5 +130,10 @@ class ApiUtil {
     );
     final result = await _sunriseService.accountUpdate(request: request);
     return AccountMapper.fromApi(account: result);
+  }
+
+  Future<List<Data>> dataIndex({required int userId}) async {
+    final result = await _sunriseService.dataIndex(userId: userId);
+    return result.map((e) => DataMapper.fromApi(data: e)).toList();
   }
 }
