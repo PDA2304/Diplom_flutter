@@ -98,7 +98,8 @@ class SunriseService {
     }
   }
 
-  accountUpdate({required RequestAccountUpdate request}) async {
+  Future<ApiAccount> accountUpdate(
+      {required RequestAccountUpdate request}) async {
     try {
       final response = await _dio.put('account', data: request.toApi());
       return ApiAccount.fromApi(response.data);
