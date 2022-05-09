@@ -47,6 +47,81 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Просмотр / Изменнение заметки'),
+        actions: [
+          PopupMenuButton(
+              itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 0,
+                      child: Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.info_outline,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Text('Описание')
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 1,
+                      child: Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.group_add_sharp,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Text('Поделиться данными')
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 2,
+                      child: Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                          Text('Удалить')
+                        ],
+                      ),
+                    )
+                  ],
+              onSelected: (item) {
+                switch (item) {
+                  case 0:
+                    {
+                      break;
+                    }
+                  case 1:
+                    {
+                      break;
+                    }
+                  case 2:
+                    {
+                      context
+                          .read<NotesCubit>()
+                          .notesDelete(id: widget.notes.id);
+                      Navigator.pop(context);
+                      break;
+                    }
+                  default:
+                    {
+                      break;
+                    }
+                }
+              },
+              icon: const Icon(Icons.more_vert_outlined))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),

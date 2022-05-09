@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 
@@ -51,5 +52,9 @@ class NotesCubit extends Cubit<NotesState> {
     } else {
       emit(NotesUpdate(notes, false));
     }
+  }
+
+  void notesDelete({required int id}) {
+    _dataCubit.onDelete(TypeTable.notes, id);
   }
 }

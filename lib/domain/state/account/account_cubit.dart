@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
+import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/model/validation_account.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
@@ -59,6 +60,10 @@ class AccountCubit extends Cubit<AccountState> {
       valid = account.validationAccount;
       emit(AccountUpdate(account));
     }
+  }
+
+  void notesDelete({required int id}) {
+    _dataCubit.onDelete(TypeTable.account, id);
   }
 
   void onCancel(Account account) {

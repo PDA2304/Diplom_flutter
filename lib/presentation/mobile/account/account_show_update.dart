@@ -24,7 +24,85 @@ class _AccountShowUpdateState extends State<AccountShowUpdate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Просмотр / Изменние аккаунта')),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Просмотр / Изменние аккаунта'),
+        actions: [
+          PopupMenuButton(
+              itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 0,
+                      child: Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.info_outline,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Text('Описание')
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 1,
+                      child: Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.group_add_sharp,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Text('Поделиться данными')
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 2,
+                      child: Row(
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                          Text('Удалить')
+                        ],
+                      ),
+                    )
+                  ],
+              onSelected: (item) {
+                switch (item) {
+                  case 0:
+                    {
+                      break;
+                    }
+                  case 1:
+                    {
+                      break;
+                    }
+                  case 2:
+                    {
+                      context
+                          .read<AccountCubit>()
+                          .notesDelete(id: widget.account.id);
+                      Navigator.pop(context);
+                      break;
+                    }
+                  default:
+                    {
+                      break;
+                    }
+                }
+              },
+              icon: const Icon(Icons.more_vert_outlined))
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: BlocConsumer<AccountCubit, AccountState>(
