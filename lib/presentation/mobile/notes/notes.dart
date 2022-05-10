@@ -9,6 +9,7 @@ import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/presentation/widgets/custom_search.dart';
 import 'package:passmanager_diplom/presentation/widgets/drawer.dart';
 import 'package:passmanager_diplom/presentation/widgets/floating_action_button_custuom.dart';
+import 'package:passmanager_diplom/presentation/widgets/floating_action_message.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key, required this.user}) : super(key: key);
@@ -41,8 +42,69 @@ class _NotesState extends State<Notes> {
       floatingActionButton: FloatingActionButtonCutom(userId: widget.user.id),
       body: BlocBuilder<DataCubit, DataState>(
         builder: (context, state) {
-          return (state is DataLoad)
-              ? const Center(child: CircularProgressIndicator())
+          if ((state) is DataLoad) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return (state.notesList.isEmpty)
+              ? RefreshIndicator(
+                  onRefresh: () => context.read<DataCubit>().onRefresh(
+                        typetable: TypeTable.data,
+                        userId: widget.user.id,
+                      ),
+                  child: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context).copyWith(
+                      dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                      },
+                    ),
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(child: Container()),
+                              const Text(
+                                "Добавьте первую заметку",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              const Padding(padding: EdgeInsets.all(2.5)),
+                              const Text(
+                                "Ваши данные всегда под рукой. \nВыможете хранить свои заметки.",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blue,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Expanded(child: Container()),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                  right: 40,
+                                  bottom: 90,
+                                ),
+                                alignment: AlignmentGeometry.lerp(
+                                  Alignment.centerRight,
+                                  Alignment.centerRight,
+                                  0,
+                                ),
+                                child: const FloatingActionMessage(
+                                    color: Colors.blue),
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
               : RefreshIndicator(
                   onRefresh: () => context.read<DataCubit>().onRefresh(
                       typetable: TypeTable.notes, userId: widget.user.id),

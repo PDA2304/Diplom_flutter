@@ -58,6 +58,16 @@ class DataCubit extends Cubit<DataState> {
               isCreator: account.isCreator,
               typeTable: TypeTable.account);
         }
+      case TypeTable.data:
+        {
+          return Data(
+            id: 0,
+            name: '',
+            isCreator: true,
+            createAt: DateTime.now(),
+            typeTable: TypeTable.data,
+          );
+        }
     }
   }
 
@@ -138,6 +148,8 @@ class DataCubit extends Cubit<DataState> {
           crudAccountRepository.logicDelete(id: id);
           break;
         }
+      case TypeTable.data:
+        break;
     }
     emit(DataResponse(_notesList, _accountList, _dataList));
   }
@@ -165,7 +177,7 @@ class DataCubit extends Cubit<DataState> {
               .addAll(await crudAccountRepository.index(userId: userId));
           break;
         }
-      default:
+      case TypeTable.data:
         {
           _dataList.clear();
           _dataList.addAll(await dataRepository.index(userId: userId));
