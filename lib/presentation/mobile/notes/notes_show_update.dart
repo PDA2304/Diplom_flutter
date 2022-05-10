@@ -4,6 +4,7 @@ import 'package:passmanager_diplom/domain/model/notes.dart';
 import 'package:passmanager_diplom/domain/model/validation_notes.dart';
 import 'package:passmanager_diplom/domain/state/notes/notes_cubit.dart';
 import 'package:passmanager_diplom/presentation/widgets/custom_filed.dart';
+import 'package:passmanager_diplom/presentation/widgets/data_action.dart';
 
 class NotesShowUpdate extends StatefulWidget {
   const NotesShowUpdate({Key? key, required this.notes}) : super(key: key);
@@ -48,79 +49,28 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
         centerTitle: true,
         title: const Text('Просмотр / Изменнение заметки'),
         actions: [
-          PopupMenuButton(
-              itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 0,
-                      child: Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.info_outline,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          Text('Описание')
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 1,
-                      child: Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.group_add_sharp,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          Text('Поделиться данными')
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 2,
-                      child: Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          ),
-                          Text('Удалить')
-                        ],
-                      ),
-                    )
-                  ],
-              onSelected: (item) {
-                switch (item) {
-                  case 0:
-                    {
-                      break;
-                    }
-                  case 1:
-                    {
-                      break;
-                    }
-                  case 2:
-                    {
-                      context
-                          .read<NotesCubit>()
-                          .notesDelete(id: widget.notes.id);
-                      Navigator.pop(context);
-                      break;
-                    }
-                  default:
-                    {
-                      break;
-                    }
+          DataAction(onSelected: (item) {
+            switch (item) {
+              case 0:
+                {
+                  break;
                 }
-              },
-              icon: const Icon(Icons.more_vert_outlined))
+              case 1:
+                {
+                  break;
+                }
+              case 2:
+                {
+                  context.read<NotesCubit>().notesDelete(id: widget.notes.id);
+                  Navigator.pop(context);
+                  break;
+                }
+              default:
+                {
+                  break;
+                }
+            }
+          })
         ],
       ),
       body: Padding(

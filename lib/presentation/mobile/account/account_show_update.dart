@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/state/account/account_cubit.dart';
 import 'package:passmanager_diplom/presentation/widgets/custom_filed.dart';
+import 'package:passmanager_diplom/presentation/widgets/data_action.dart';
 
 class AccountShowUpdate extends StatefulWidget {
   const AccountShowUpdate({Key? key, required this.account}) : super(key: key);
@@ -28,79 +29,32 @@ class _AccountShowUpdateState extends State<AccountShowUpdate> {
         centerTitle: true,
         title: const Text('Просмотр / Изменние аккаунта'),
         actions: [
-          PopupMenuButton(
-              itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 0,
-                      child: Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.info_outline,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          Text('Описание')
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 1,
-                      child: Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.group_add_sharp,
-                              color: Colors.blue,
-                            ),
-                          ),
-                          Text('Поделиться данными')
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 2,
-                      child: Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          ),
-                          Text('Удалить')
-                        ],
-                      ),
-                    )
-                  ],
-              onSelected: (item) {
-                switch (item) {
-                  case 0:
-                    {
-                      break;
-                    }
-                  case 1:
-                    {
-                      break;
-                    }
-                  case 2:
-                    {
-                      context
-                          .read<AccountCubit>()
-                          .notesDelete(id: widget.account.id);
-                      Navigator.pop(context);
-                      break;
-                    }
-                  default:
-                    {
-                      break;
-                    }
-                }
-              },
-              icon: const Icon(Icons.more_vert_outlined))
+          DataAction(
+            onSelected: (item) {
+              switch (item) {
+                case 0:
+                  {
+                    break;
+                  }
+                case 1:
+                  {
+                    break;
+                  }
+                case 2:
+                  {
+                    context
+                        .read<AccountCubit>()
+                        .notesDelete(id: widget.account.id);
+                    Navigator.pop(context);
+                    break;
+                  }
+                default:
+                  {
+                    break;
+                  }
+              }
+            },
+          )
         ],
       ),
       body: Padding(
