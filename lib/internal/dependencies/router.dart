@@ -11,6 +11,7 @@ import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/domain/state/notes/notes_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
+import 'package:passmanager_diplom/domain/state/tash/trash_cubit.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
 import 'package:passmanager_diplom/presentation/mobile/account/account_add.dart';
 import 'package:passmanager_diplom/presentation/mobile/account/account_show_update.dart';
@@ -125,8 +126,13 @@ class AppRouter {
         }
       case UrlPage.trash:
         {
+          int userId = settings.arguments as int;
           return MaterialPageRoute(
-            builder: (_) => const Trash(),
+            builder: (_) => BlocProvider(
+              create: (context) =>
+                  TrashCubit(RepositoryModule.trashRepository(), _dataCubit),
+              child: Trash(userId: userId),
+            ),
           );
         }
       case UrlPage.accountAdd:

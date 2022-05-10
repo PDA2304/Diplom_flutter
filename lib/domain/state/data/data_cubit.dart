@@ -4,6 +4,7 @@ import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/model/data.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
+import 'package:passmanager_diplom/domain/model/trash_data.dart';
 import 'package:passmanager_diplom/domain/repository/crud_account_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_notes_repository.dart';
 import 'package:passmanager_diplom/domain/repository/data_repository.dart';
@@ -27,7 +28,7 @@ class DataCubit extends Cubit<DataState> {
   final List<Account> _accountList = <Account>[];
   bool isInit = false;
 
-  Data DataMapper(TypeTable typeTable, dynamic data) {
+  Data dataMapper(TypeTable typeTable, dynamic data) {
     switch (typeTable) {
       case TypeTable.notes:
         {
@@ -84,7 +85,7 @@ class DataCubit extends Cubit<DataState> {
 
   void addNotes(Notes notes) {
     _notesList.insert(0, notes);
-    _dataList.insert(0, DataMapper(TypeTable.notes, notes));
+    _dataList.insert(0, dataMapper(TypeTable.notes, notes));
     emit(DataResponse(_notesList, state.accountList, _dataList));
   }
 
@@ -96,13 +97,13 @@ class DataCubit extends Cubit<DataState> {
     _dataList.removeWhere((element) =>
         (element.id == notes.id) && (element.typeTable == TypeTable.notes));
     _notesList.insert(index, notes);
-    _dataList.insert(dataIndex, DataMapper(TypeTable.notes, notes));
+    _dataList.insert(dataIndex, dataMapper(TypeTable.notes, notes));
     emit(DataResponse(_notesList, state.accountList, _dataList));
   }
 
   void addAccount(Account account) {
     _accountList.insert(0, account);
-    _dataList.insert(0, DataMapper(TypeTable.account, account));
+    _dataList.insert(0, dataMapper(TypeTable.account, account));
     emit(DataResponse(state.notesList, _accountList, _dataList));
   }
 
@@ -114,7 +115,7 @@ class DataCubit extends Cubit<DataState> {
     _dataList.removeWhere((element) =>
         (element.id == account.id) && (element.typeTable == TypeTable.account));
     _accountList.insert(index, account);
-    _dataList.insert(dataIndex, DataMapper(TypeTable.account, account));
+    _dataList.insert(dataIndex, dataMapper(TypeTable.account, account));
     emit(DataResponse(state.notesList, _accountList, _dataList));
   }
 
@@ -183,6 +184,29 @@ class DataCubit extends Cubit<DataState> {
           _dataList.addAll(await dataRepository.index(userId: userId));
         }
     }
+    emit(DataResponse(_notesList, _accountList, _dataList));
+  }
+
+  void restoration({required List<TrashData> data, required int userId}) async {
+    _notesList.clear();
+    _accountList.clear();
+    _dataList.addAll(data
+        .map(
+          (e) => Data(
+            id: e.id,
+            name: e.name,
+            createAt: e.createAt,
+            isCreator: e.isCreator,
+            typeTable: e.typeTable,
+          ),
+        )
+        .toList());
+    _dataList.sort((a, b) {
+      return b.createAt.compareTo(a.createAt);
+    });
+
+    _notesList.addAll(await crudNotesRepository.index(userId: userId));
+    _accountList.addAll(await crudAccountRepository.index(userId: userId));
     emit(DataResponse(_notesList, _accountList, _dataList));
   }
 }

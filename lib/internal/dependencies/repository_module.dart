@@ -8,6 +8,8 @@ import 'package:passmanager_diplom/domain/repository/crud_notes_repository.dart'
 import 'package:passmanager_diplom/domain/repository/crud_reposittiry.dart';
 import 'package:passmanager_diplom/domain/repository/data_data_repository.dart';
 import 'package:passmanager_diplom/domain/repository/data_repository.dart';
+import 'package:passmanager_diplom/domain/repository/trash_data_repository.dart';
+import 'package:passmanager_diplom/domain/repository/trash_repository.dart';
 import 'package:passmanager_diplom/internal/dependencies/api_module.dart';
 
 class RepositoryModule {
@@ -16,6 +18,7 @@ class RepositoryModule {
   static CRUDNotesRepository? _crudNotesRepository;
   static CRUDAccountRepository? _crudAccountRepository;
   static DataRepository? _dataRepository;
+  static TrashRepository? _trashRepository;
 
   static AuthRepository authRepository() {
     _authRepository ??= AuthDataRepository(ApiModule.apiUtil());
@@ -40,5 +43,10 @@ class RepositoryModule {
   static DataRepository dataRepository() {
     _dataRepository ??= DataDataRepository(ApiModule.apiUtil());
     return _dataRepository!;
+  }
+
+  static TrashRepository trashRepository() {
+    _trashRepository ??= TrashDataRepository(ApiModule.apiUtil());
+    return _trashRepository!;
   }
 }

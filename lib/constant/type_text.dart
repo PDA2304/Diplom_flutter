@@ -1,0 +1,4 @@
+enum TypeText {
+  actionSelect,
+  countSelect,
+}

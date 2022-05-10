@@ -9,6 +9,7 @@ import 'package:passmanager_diplom/data/api/model/api_user.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
+import 'package:passmanager_diplom/data/api/request/request_trash_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
@@ -134,6 +135,55 @@ class SunriseService {
       return ApiData.fromApiList(response.data);
     } on DioError catch (e) {
       return <ApiData>[];
+    }
+  }
+
+  Future<List<ApiData>> trashIndex({required int userId}) async {
+    try {
+      final response = await _dio.get('trash/$userId');
+      return ApiData.fromApiList(response.data);
+    } on DioError catch (e) {
+      return <ApiData>[];
+    }
+  }
+
+  Future<bool> deleteData({required RequestTrashList request}) async {
+    try {
+      await _dio.delete('trash', data: request.toApi());
+      return true;
+    } on DioError catch (e) {
+      print(e.message);
+      return false;
+    }
+  }
+
+  Future<bool> deleteAllData({required int userId}) async {
+    try {
+      await _dio.delete('trash/allUser/$userId');
+      return true;
+    } on DioError catch (e) {
+      print(e.message);
+      return false;
+    }
+  }
+
+  Future<bool> restorationAllData({required int userId}) async {
+    try {
+      await _dio.post('trash/allUser/$userId');
+      return true;
+    } on DioError catch (e) {
+      print(e.message);
+      return false;
+    }
+  }
+
+  Future<bool> restorationData({required RequestTrashList request}) async {
+    try {
+      await _dio.post('trash', data: request.toApi());
+      return true;
+    } on DioError catch (e) {
+      print(e.message);
+      return false;
     }
   }
 }

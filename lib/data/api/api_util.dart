@@ -1,6 +1,8 @@
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
+import 'package:passmanager_diplom/data/api/request/request_trash.dart';
+import 'package:passmanager_diplom/data/api/request/request_trash_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
@@ -10,11 +12,14 @@ import 'package:passmanager_diplom/data/mapper/account_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/confirmation_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/data_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/notes_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/trash_data_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/user_mapper.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart';
 import 'package:passmanager_diplom/domain/model/data.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
+import 'package:passmanager_diplom/domain/model/trash.dart';
+import 'package:passmanager_diplom/domain/model/trash_data.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 
 class ApiUtil {
@@ -145,5 +150,30 @@ class ApiUtil {
   Future<List<Data>> dataIndex({required int userId}) async {
     final result = await _sunriseService.dataIndex(userId: userId);
     return result.map((e) => DataMapper.fromApi(data: e)).toList();
+  }
+
+  Future<List<TrashData>> trashIndex({required int userId}) async {
+    final result = await _sunriseService.trashIndex(userId: userId);
+    return result.map((e) => TrashDataMapper.fromApi(data: e)).toList();
+  }
+
+  Future<bool> deleteData({required List<Trash> trash}) async {
+    final request = RequestTrashList(
+        trash.map((e) => RequestTrash(e.id, e.typeTable)).toList());
+    return await _sunriseService.deleteData(request: request);
+  }
+
+  Future<bool> deleteAllData({required int userId}) async {
+    return await _sunriseService.deleteAllData(userId: userId);
+  }
+
+  Future<bool> restorationData({required List<Trash> trash}) async {
+    final request = RequestTrashList(
+        trash.map((e) => RequestTrash(e.id, e.typeTable)).toList());
+    return await _sunriseService.restorationData(request: request);
+  }
+
+  Future<bool> restorationAllData({required int userId}) async {
+    return await _sunriseService.restorationAllData(userId: userId);
   }
 }
