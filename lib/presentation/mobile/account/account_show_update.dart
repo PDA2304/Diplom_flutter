@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:passmanager_diplom/constant/type_table.dart';
+import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/state/account/account_cubit.dart';
 import 'package:passmanager_diplom/presentation/widgets/custom_filed.dart';
@@ -34,6 +36,11 @@ class _AccountShowUpdateState extends State<AccountShowUpdate> {
               switch (item) {
                 case 0:
                   {
+                    Navigator.pushNamed(context, UrlPage.dataDescription,
+                        arguments: [
+                          widget.account.id,
+                          TypeTable.account,
+                        ]);
                     break;
                   }
                 case 1:

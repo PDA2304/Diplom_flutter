@@ -1,6 +1,9 @@
+import 'package:passmanager_diplom/constant/type_table.dart';
+import 'package:passmanager_diplom/data/api/model/api_data_information.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
+import 'package:passmanager_diplom/data/api/request/request_history_action.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
@@ -10,17 +13,23 @@ import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
 import 'package:passmanager_diplom/data/api/service/sunrice_service.dart';
 import 'package:passmanager_diplom/data/mapper/account_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/confirmation_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/data_information_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/data_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/history_action_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/notes_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/trash_data_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/user_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/user_share_mapper.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart';
 import 'package:passmanager_diplom/domain/model/data.dart';
+import 'package:passmanager_diplom/domain/model/data_information.dart';
+import 'package:passmanager_diplom/domain/model/history_action.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
 import 'package:passmanager_diplom/domain/model/trash.dart';
 import 'package:passmanager_diplom/domain/model/trash_data.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
+import 'package:passmanager_diplom/domain/model/user_share.dart';
 
 class ApiUtil {
   final SunriseService _sunriseService;
@@ -175,5 +184,47 @@ class ApiUtil {
 
   Future<bool> restorationAllData({required int userId}) async {
     return await _sunriseService.restorationAllData(userId: userId);
+  }
+
+  Future<List<HistoryAction>> indexHistoryAction({
+    required int userId,
+    required int dataId,
+    required TypeTable typeTable,
+  }) async {
+    final request = RequestInfromation(
+      userId: userId,
+      dataId: dataId,
+      typeTableId: typeTable.index,
+    );
+
+    final result = await _sunriseService.indexHistoryAction(request: request);
+    return result.map((e) => HistoryActionMapper.fromApi(apiModel: e)).toList();
+  }
+
+  Future<List<UserShare>> indexUserShare({
+    required int userId,
+    required int dataId,
+    required TypeTable typeTable,
+  }) async {
+    final request = RequestInfromation(
+      userId: userId,
+      dataId: dataId,
+      typeTableId: typeTable.index,
+    );
+
+    final result = await _sunriseService.indexUserShare(request: request);
+    return result.map((e) => UserShareMapper.fromApi(apiModel: e)).toList();
+  }
+
+  Future<DataInformation> indexDataInformation({
+    required int dataId,
+    required TypeTable typeTable,
+  }) async {
+    final request = RequestInfromation(
+      dataId: dataId,
+      typeTableId: typeTable.index,
+    );
+    final result = await _sunriseService.indexDataInformation(request: request);
+    return DataInformationMapper.fromApi(result);
   }
 }

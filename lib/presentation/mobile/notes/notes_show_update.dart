@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:passmanager_diplom/constant/type_table.dart';
+import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
 import 'package:passmanager_diplom/domain/model/validation_notes.dart';
 import 'package:passmanager_diplom/domain/state/notes/notes_cubit.dart';
@@ -53,6 +55,11 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
             switch (item) {
               case 0:
                 {
+                  Navigator.pushNamed(context, UrlPage.dataDescription,
+                      arguments: [
+                        widget.notes.id,
+                        TypeTable.notes,
+                      ]);
                   break;
                 }
               case 1:

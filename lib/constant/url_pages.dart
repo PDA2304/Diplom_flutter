@@ -13,4 +13,5 @@ abstract class UrlPage {
   static const String notesShowUpdate = '/notesShowUpdate';
   static const String accountShowUpdate = '/accountShowUpdate';
   static const String trash = '/trash';
+  static const String dataDescription = '/dataDescription';
 }

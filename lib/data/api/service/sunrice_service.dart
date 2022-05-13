@@ -3,12 +3,18 @@ import 'package:passmanager_diplom/data/api/model/api_account.dart';
 import 'package:passmanager_diplom/data/api/model/api_account_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_confirmation.dart';
 import 'package:passmanager_diplom/data/api/model/api_data.dart';
+import 'package:passmanager_diplom/data/api/model/api_data_information.dart';
+import 'package:passmanager_diplom/data/api/model/api_history_action.dart';
+import 'package:passmanager_diplom/data/api/model/api_history_action_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_user.dart';
+import 'package:passmanager_diplom/data/api/model/api_user_share.dart';
+import 'package:passmanager_diplom/data/api/model/api_user_share_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
+import 'package:passmanager_diplom/data/api/request/request_history_action.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_update.dart';
@@ -184,6 +190,42 @@ class SunriseService {
     } on DioError catch (e) {
       print(e.message);
       return false;
+    }
+  }
+
+  Future<List<ApiHistoryAction>> indexHistoryAction(
+      {required RequestInfromation request}) async {
+    try {
+      final response = await _dio.get('information/history_action',
+          queryParameters: request.toApiHistoryAction());
+      return ApiHistoryActionList.fromApi(response.data).list;
+    } on DioError catch (e) {
+      print(e.message);
+      return <ApiHistoryAction>[];
+    }
+  }
+
+  Future<List<ApiUserShare>> indexUserShare(
+      {required RequestInfromation request}) async {
+    try {
+      final response = await _dio.get('information/user_share',
+          queryParameters: request.toApiUserShare());
+      return ApiUserShareList.fromApi(response.data).list;
+    } on DioError catch (e) {
+      print(e.message);
+      return <ApiUserShare>[];
+    }
+  }
+
+  Future<ApiDataInformation> indexDataInformation(
+      {required RequestInfromation request}) async {
+    try {
+      final response = await _dio.get('information/data_information',
+          queryParameters: request.toApiUserShare());
+      return ApiDataInformation.fromApi(response.data);
+    } on DioError catch (e) {
+      print(e.message);
+      return ApiDataInformation.fromApi({});
     }
   }
 }
