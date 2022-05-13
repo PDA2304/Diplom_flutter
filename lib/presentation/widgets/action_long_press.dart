@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:passmanager_diplom/constant/type_table.dart';
+import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 
 class ActionLongPress {
@@ -20,12 +21,10 @@ class ActionLongPress {
       builder: (ctx) => Wrap(
         children: [
           ListTile(
-            title: const Text('История действий'),
-            onTap: () {},
-          ),
-          ListTile(
-            title: const Text('Информация'),
-            onTap: () {},
+            title: const Text('Описание'),
+            onTap: () {
+              onNavigationDataDescription(context);
+            },
           ),
           ListTile(
             title: const Text('Поделиться данными'),
@@ -45,6 +44,41 @@ class ActionLongPress {
         ],
       ),
     );
+  }
+
+  onNavigationDataDescription(BuildContext context) {
+    switch (typeTable) {
+      case TypeTable.notes:
+        {
+          Navigator.pop(context);
+          Navigator.pushNamed(
+            context,
+            UrlPage.dataDescription,
+            arguments: [
+              id,
+              TypeTable.notes,
+            ],
+          );
+          break;
+        }
+      case TypeTable.files:
+        break;
+      case TypeTable.account:
+        {
+          Navigator.pop(context);
+          Navigator.pushNamed(
+            context,
+            UrlPage.dataDescription,
+            arguments: [
+              id,
+              TypeTable.account,
+            ],
+          );
+          break;
+        }
+      case TypeTable.data:
+        break;
+    }
   }
 
   Widget _allerDialogDelete(BuildContext context) {

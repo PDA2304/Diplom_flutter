@@ -6,6 +6,7 @@ import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
+import 'package:passmanager_diplom/presentation/widgets/action_long_press.dart';
 import 'package:passmanager_diplom/presentation/widgets/custom_search.dart';
 import 'package:passmanager_diplom/presentation/widgets/drawer.dart';
 import 'package:passmanager_diplom/presentation/widgets/floating_action_button_custuom.dart';
@@ -120,6 +121,13 @@ class _NotesState extends State<Notes> {
                         itemBuilder: (context, count) {
                           return Card(
                             child: InkWell(
+                              onLongPress: () {
+                                ActionLongPress(
+                                        id: state.notesList[count].id,
+                                        typeTable: TypeTable.notes,
+                                        cubit: context.read<DataCubit>())
+                                    .show(context);
+                              },
                               onTap: () {
                                 Navigator.pushNamed(
                                   context,
