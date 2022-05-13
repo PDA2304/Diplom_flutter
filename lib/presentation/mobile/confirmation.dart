@@ -84,7 +84,11 @@ class _ConfirmationState extends State<Confirmation> {
                         .then((value) {
                       RepositoryModule.crudRepository().create(user: value);
                       Navigator.pushNamedAndRemoveUntil(
-                          context, UrlPage.home, (route) => false);
+                        context,
+                        UrlPage.home,
+                        (route) => false,
+                        arguments: value,
+                      );
                     });
                   } else {
                     _showSnackBar(context);
