@@ -5,6 +5,8 @@ import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/model/data.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
 import 'package:passmanager_diplom/domain/model/trash_data.dart';
+import 'package:passmanager_diplom/domain/model/user.dart';
+import 'package:passmanager_diplom/domain/model/validation_auth.dart';
 import 'package:passmanager_diplom/domain/repository/crud_account_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_notes_repository.dart';
 import 'package:passmanager_diplom/domain/repository/data_repository.dart';
@@ -26,7 +28,17 @@ class DataCubit extends Cubit<DataState> {
   final List<Data> _dataList = <Data>[];
   final List<Notes> _notesList = <Notes>[];
   final List<Account> _accountList = <Account>[];
+
   bool isInit = false;
+
+  void drawer(User user) {
+    emit(DrawerUpdate(
+      user,
+      state.notesList,
+      state.accountList,
+      state.dataList,
+    ));
+  }
 
   Data dataMapper(TypeTable typeTable, dynamic data) {
     switch (typeTable) {

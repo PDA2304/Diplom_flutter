@@ -11,6 +11,7 @@ import 'package:passmanager_diplom/domain/state/account/account_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data_description/data_information_cubit.dart';
 import 'package:passmanager_diplom/domain/state/notes/notes_cubit.dart';
+import 'package:passmanager_diplom/domain/state/settings/settings_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
 import 'package:passmanager_diplom/domain/state/tash/trash_cubit.dart';
@@ -123,8 +124,13 @@ class AppRouter {
         }
       case UrlPage.settings:
         {
+          var user = settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => const Settings(),
+            builder: (_) => BlocProvider(
+              create: (context) =>
+                  SettingsCubit(_dataCubit, RepositoryModule.authRepository(),RepositoryModule.crudRepository()),
+              child: Settings(user: user),
+            ),
           );
         }
       case UrlPage.trash:

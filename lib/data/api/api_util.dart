@@ -1,9 +1,11 @@
 import 'package:passmanager_diplom/constant/type_table.dart';
-import 'package:passmanager_diplom/data/api/model/api_data_information.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
 import 'package:passmanager_diplom/data/api/request/request_history_action.dart';
+import 'package:passmanager_diplom/data/api/request/request_new_login.dart';
+import 'package:passmanager_diplom/data/api/request/request_new_password.dart';
+import 'package:passmanager_diplom/data/api/request/request_new_user_name.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
@@ -13,6 +15,7 @@ import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
 import 'package:passmanager_diplom/data/api/service/sunrice_service.dart';
 import 'package:passmanager_diplom/data/mapper/account_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/confirmation_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/confirmation_new_login_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/data_information_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/data_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/history_action_mapper.dart';
@@ -20,8 +23,12 @@ import 'package:passmanager_diplom/data/mapper/notes_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/trash_data_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/user_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/user_share_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/validation_new_login_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/validation_new_password_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/validation_new_user_name_mapper.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart';
+import 'package:passmanager_diplom/domain/model/confirmation_new_login.dart';
 import 'package:passmanager_diplom/domain/model/data.dart';
 import 'package:passmanager_diplom/domain/model/data_information.dart';
 import 'package:passmanager_diplom/domain/model/history_action.dart';
@@ -30,6 +37,9 @@ import 'package:passmanager_diplom/domain/model/trash.dart';
 import 'package:passmanager_diplom/domain/model/trash_data.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/model/user_share.dart';
+import 'package:passmanager_diplom/domain/model/validation_new_login.dart';
+import 'package:passmanager_diplom/domain/model/validation_new_password.dart';
+import 'package:passmanager_diplom/domain/model/validation_new_user_name.dart';
 
 class ApiUtil {
   final SunriseService _sunriseService;
@@ -226,5 +236,39 @@ class ApiUtil {
     );
     final result = await _sunriseService.indexDataInformation(request: request);
     return DataInformationMapper.fromApi(result);
+  }
+
+  Future<ValidationNewPassword> newPassword({
+    required int id,
+    required String newPassword,
+    required String oldPassword,
+  }) async {
+    final request = RequestNewPassword(
+        id: id, newPassword: newPassword, oldPassword: oldPassword);
+    final result = await _sunriseService.newPassword(request: request);
+    return ValidationNewPasswordMapper.fromApi(result);
+  }
+
+  Future<ValidationNewLogin> newLogin({
+    required int id,
+    required String login,
+  }) async {
+    final request = RequestNewLogin(id: id, login: login);
+    final result = await _sunriseService.newLogin(request: request);
+    return ValidationNewLoginMapper.fromApi(model: result);
+  }
+
+  Future<ValidationNewUserName> newUserName(
+      {required int id, required String userName}) async {
+    final request = RequestNewUserName(id: id, userName: userName);
+    final result = await _sunriseService.newUserName(request: request);
+    return ValidationNewUserNameMapper.fromApi(result);
+  }
+
+  Future<ConfirmationNewLogin> confirmationNewLogin(
+      {required int id, required String login}) async {
+    final request = RequestNewLogin(id: id, login: login);
+    final result = await _sunriseService.confirmatioNewLogin(request: request);
+    return ConfirmatioNewLoginMapper.fromApi(result);
   }
 }

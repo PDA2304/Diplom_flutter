@@ -44,8 +44,11 @@ class _HomeState extends State<Home> {
               icon: const Icon(Icons.search))
         ],
       ),
-      drawer: AppDrawer(
-        user: widget.user,
+      drawer: BlocBuilder<DataCubit, DataState>(
+        builder: (context, state) {
+          if (state is DrawerUpdate) return AppDrawer(user: state.user);
+          return AppDrawer(user: widget.user);
+        },
       ),
       floatingActionButton: FloatingActionButtonCutom(userId: widget.user.id),
       body: BlocBuilder<DataCubit, DataState>(

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:passmanager_diplom/data/api/model/api_account.dart';
 import 'package:passmanager_diplom/data/api/model/api_account_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_confirmation.dart';
+import 'package:passmanager_diplom/data/api/model/api_confirmation_new_login.dart';
 import 'package:passmanager_diplom/data/api/model/api_data.dart';
 import 'package:passmanager_diplom/data/api/model/api_data_information.dart';
 import 'package:passmanager_diplom/data/api/model/api_history_action.dart';
@@ -11,15 +12,22 @@ import 'package:passmanager_diplom/data/api/model/api_notes_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_user.dart';
 import 'package:passmanager_diplom/data/api/model/api_user_share.dart';
 import 'package:passmanager_diplom/data/api/model/api_user_share_list.dart';
+import 'package:passmanager_diplom/data/api/model/api_validatio_new_user_name.dart';
+import 'package:passmanager_diplom/data/api/model/api_validation_new_login.dart';
+import 'package:passmanager_diplom/data/api/model/api_validation_new_password.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
 import 'package:passmanager_diplom/data/api/request/request_history_action.dart';
+import 'package:passmanager_diplom/data/api/request/request_new_login.dart';
+import 'package:passmanager_diplom/data/api/request/request_new_password.dart';
+import 'package:passmanager_diplom/data/api/request/request_new_user_name.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
+import 'package:passmanager_diplom/domain/model/confirmation_new_login.dart';
 
 class SunriseService {
   static const _BASE_URL = 'http://192.168.157.128:8888/api/';
@@ -226,6 +234,59 @@ class SunriseService {
     } on DioError catch (e) {
       print(e.message);
       return ApiDataInformation.fromApi({});
+    }
+  }
+
+  Future<ApiValidationNewPassword> newPassword(
+      {required RequestNewPassword request}) async {
+    try {
+      final response = await _dio.post('newPassword', data: request.toApi());
+      return ApiValidationNewPassword.fromApi({});
+    } on DioError catch (e) {
+      if (e.response != null) {
+        return ApiValidationNewPassword.fromApi(e.response!.data['error']);
+      }
+      return ApiValidationNewPassword.fromApi({});
+    }
+  }
+
+  Future<ApiValidationNewLogin> newLogin(
+      {required RequestNewLogin request}) async {
+    try {
+      final response = await _dio.post('newLogin', data: request.toApi());
+      return ApiValidationNewLogin.fromApi({});
+    } on DioError catch (e) {
+      if (e.response != null) {
+        return ApiValidationNewLogin.fromApi(e.response!.data['error']);
+      }
+      return ApiValidationNewLogin.fromApi({});
+    }
+  }
+
+  Future<ApiValidationNewUserName> newUserName(
+      {required RequestNewUserName request}) async {
+    try {
+      final reponse = await _dio.post('newUserName', data: request.toApi());
+      return ApiValidationNewUserName.fromApi({});
+    } on DioError catch (e) {
+      if (e.response != null) {
+        return ApiValidationNewUserName.fromApi(e.response!.data['error']);
+      }
+      return ApiValidationNewUserName.fromApi({});
+    }
+  }
+
+  Future<ApiConfirmationNewLogin> confirmatioNewLogin(
+      {required RequestNewLogin request}) async {
+    try {
+      final reponse =
+          await _dio.post('confirmationNewLogin', data: request.toApi());
+      return ApiConfirmationNewLogin.fromApi(reponse.data);
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.statusCode == 422) {
+        return ApiConfirmationNewLogin.fromApi(e.response!.data);
+      }
+      return ApiConfirmationNewLogin.fromApi({'number': 0});
     }
   }
 }

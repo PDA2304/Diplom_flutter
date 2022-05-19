@@ -4,8 +4,13 @@ class ValidationAuth {
   final String? password;
 
   ValidationAuth({
-    required this.userName,
-    required this.login,
-    required this.password,
+    this.userName,
+    this.login,
+    this.password,
   });
+
+  ValidationAuth.Empty()
+      : userName = null,
+        login = null,
+        password = null;
 }

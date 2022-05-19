@@ -72,8 +72,11 @@ class AppDrawer extends StatelessWidget {
                       child: Container(
                         alignment: Alignment.centerRight,
                         child: InkWell(
-                          onTap: () =>
-                              Navigator.pushNamed(context, UrlPage.settings),
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            UrlPage.settings,
+                            arguments: user,
+                          ),
                           child: const Icon(
                             Icons.settings,
                             color: Colors.blue,

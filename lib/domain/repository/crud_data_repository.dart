@@ -33,7 +33,9 @@ class CRUDDataRepository extends CRUDRepository {
   }
 
   @override
-  void update() {
-    // TODO: implement update
+  void update(String key, String content) async {
+    _preferences = await SharedPreferences.getInstance();
+    _preferences!.remove(key);
+    _preferences!.setString(key, content);
   }
 }
