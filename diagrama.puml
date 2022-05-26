@@ -1,0 +1,1460 @@
+@startuml
+set namespaceSeparator ::
+
+class "passmanager_diplom::constant::type_table.dart::TypeTable" {
+  +int index
+  {static} +List<TypeTable> values
+  {static} +TypeTable notes
+  {static} +TypeTable files
+  {static} +TypeTable account
+  {static} +TypeTable data
+}
+
+"passmanager_diplom::constant::type_table.dart::TypeTable" o-- "passmanager_diplom::constant::type_table.dart::TypeTable"
+"dart::core::Enum" <|-- "passmanager_diplom::constant::type_table.dart::TypeTable"
+
+class "passmanager_diplom::constant::type_text.dart::TypeText" {
+  +int index
+  {static} +List<TypeText> values
+  {static} +TypeText actionSelect
+  {static} +TypeText countSelect
+}
+
+"passmanager_diplom::constant::type_text.dart::TypeText" o-- "passmanager_diplom::constant::type_text.dart::TypeText"
+"dart::core::Enum" <|-- "passmanager_diplom::constant::type_text.dart::TypeText"
+
+abstract class "passmanager_diplom::constant::url_pages.dart::UrlPage" {
+  {static} +String singUp
+  {static} +String singIn
+  {static} +String confirmation
+  {static} +String home
+  {static} +String account
+  {static} +String notes
+  {static} +String files
+  {static} +String settings
+  {static} +String accountAdd
+  {static} +String notesAdd
+  {static} +String filesAdd
+  {static} +String notesShowUpdate
+  {static} +String accountShowUpdate
+  {static} +String trash
+  {static} +String dataDescription
+}
+
+class "passmanager_diplom::data::api::api_util.dart::ApiUtil" {
+  -SunriseService _sunriseService
+  +Future<User> singUp()
+  +Future<User> singIn()
+  +Future<Confirmation> confirmation()
+  +Future<Notes> notesCreate()
+  +Future<List<Notes>> notesIndex()
+  +Future<Notes> notesUpdate()
+  +Future<Notes> notesDelete()
+  +Future<Account> accountCreate()
+  +Future<List<Account>> accountIndex()
+  +Future<Account> accountUpdate()
+  +Future<Account> accountDelete()
+  +Future<List<Data>> dataIndex()
+  +Future<List<TrashData>> trashIndex()
+  +Future<bool> deleteData()
+  +Future<bool> deleteAllData()
+  +Future<bool> restorationData()
+  +Future<bool> restorationAllData()
+  +Future<List<HistoryAction>> indexHistoryAction()
+  +Future<List<UserShare>> indexUserShare()
+  +Future<DataInformation> indexDataInformation()
+  +Future<ValidationNewPassword> newPassword()
+  +Future<ValidationNewLogin> newLogin()
+  +Future<ValidationNewUserName> newUserName()
+  +Future<ConfirmationNewLogin> confirmationNewLogin()
+}
+
+"passmanager_diplom::data::api::api_util.dart::ApiUtil" o-- "passmanager_diplom::data::api::service::sunrice_service.dart::SunriseService"
+
+class "passmanager_diplom::data::api::model::api_account.dart::ApiAccount" {
+  +int? id
+  +String? accountName
+  +String? login
+  +String? password
+  +String? description
+  +String? createAt
+  +bool? isCreator
+  +int? userId
+  +ApiValidationAccount? validAccount
+}
+
+"passmanager_diplom::data::api::model::api_account.dart::ApiAccount" o-- "passmanager_diplom::data::api::model::api_validation_account.dart::ApiValidationAccount"
+
+class "passmanager_diplom::data::api::model::api_account_list.dart::ApiAccountList" {
+  +List<ApiAccount> accountList
+}
+
+class "passmanager_diplom::data::api::model::api_confirmation.dart::ApiConfirmation" {
+  +int? number
+  +ApiValidationAuth? validatioAuth
+}
+
+"passmanager_diplom::data::api::model::api_confirmation.dart::ApiConfirmation" o-- "passmanager_diplom::data::api::model::api_validation_auth.dart::ApiValidationAuth"
+
+class "passmanager_diplom::data::api::model::api_confirmation_new_login.dart::ApiConfirmationNewLogin" {
+  +int number
+  +ApiValidationNewLogin? validationNewLogin
+}
+
+"passmanager_diplom::data::api::model::api_confirmation_new_login.dart::ApiConfirmationNewLogin" o-- "passmanager_diplom::data::api::model::api_validation_new_login.dart::ApiValidationNewLogin"
+
+class "passmanager_diplom::data::api::model::api_data.dart::ApiData" {
+  +int id
+  +String name
+  +String createAt
+  +bool isCreator
+  +TypeTable typeTable
+  {static} +List<ApiData> fromApiList()
+}
+
+"passmanager_diplom::data::api::model::api_data.dart::ApiData" o-- "passmanager_diplom::constant::type_table.dart::TypeTable"
+
+class "passmanager_diplom::data::api::model::api_data_information.dart::ApiDataInformation" {
+  +int userId
+  +List<ApiInformationText> informationText
+}
+
+class "passmanager_diplom::data::api::model::api_history_action.dart::ApiHistoryAction" {
+  +int userId
+  +String userName
+  +String typeAction
+  +String actionDate
+}
+
+class "passmanager_diplom::data::api::model::api_history_action_list.dart::ApiHistoryActionList" {
+  +List<ApiHistoryAction> list
+}
+
+class "passmanager_diplom::data::api::model::api_information_text.dart::ApiInformationText" {
+  +String title
+  +String content
+}
+
+class "passmanager_diplom::data::api::model::api_notes.dart::ApiNotes" {
+  +int? id
+  +String? notesName
+  +String? content
+  +String? description
+  +String? createAt
+  +bool? isCreator
+  +int? userId
+  +ApiValidationNotes? apiValidationNotes
+}
+
+"passmanager_diplom::data::api::model::api_notes.dart::ApiNotes" o-- "passmanager_diplom::data::api::model::api_validation_notes.dart::ApiValidationNotes"
+
+class "passmanager_diplom::data::api::model::api_notes_list.dart::ApiNotesList" {
+  +List<ApiNotes> notesList
+}
+
+class "passmanager_diplom::data::api::model::api_user.dart::ApiUser" {
+  +int? id
+  +String? userName
+  +String? email
+  +ApiValidationAuth validAuth
+}
+
+"passmanager_diplom::data::api::model::api_user.dart::ApiUser" o-- "passmanager_diplom::data::api::model::api_validation_auth.dart::ApiValidationAuth"
+
+class "passmanager_diplom::data::api::model::api_user_share.dart::ApiUserShare" {
+  +int userId
+  +String userLogin
+  +String userName
+  +String createdShare
+}
+
+class "passmanager_diplom::data::api::model::api_user_share_list.dart::ApiUserShareList" {
+  +List<ApiUserShare> list
+}
+
+class "passmanager_diplom::data::api::model::api_validation_account.dart::ApiValidationAccount" {
+  +List<dynamic> accountName
+  +List<dynamic> login
+  +List<dynamic> password
+}
+
+class "passmanager_diplom::data::api::model::api_validation_auth.dart::ApiValidationAuth" {
+  +List<dynamic>? userName
+  +List<dynamic>? login
+  +List<dynamic>? password
+}
+
+class "passmanager_diplom::data::api::model::api_validation_new_login.dart::ApiValidationNewLogin" {
+  +List<dynamic>? login
+}
+
+class "passmanager_diplom::data::api::model::api_validation_new_password.dart::ApiValidationNewPassword" {
+  +List<dynamic>? newPassword
+  +List<dynamic>? oldPassword
+}
+
+class "passmanager_diplom::data::api::model::api_validation_notes.dart::ApiValidationNotes" {
+  +List<dynamic> notesName
+  +List<dynamic> content
+  +List<dynamic> description
+}
+
+class "passmanager_diplom::data::api::model::api_validatio_new_user_name.dart::ApiValidationNewUserName" {
+  +List<dynamic>? userName
+}
+
+class "passmanager_diplom::data::api::request::request_account_create.dart::RequestAccountCreate" {
+  +String? accountName
+  +String? login
+  +String? password
+  +String? description
+  +int? userId
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_account_update.dart::RequestAccountUpdate" {
+  +int? id
+  +String? accountName
+  +String? login
+  +String? password
+  +String? description
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_confirmation.dart::RequestConfirmation" {
+  +String userName
+  +String login
+  +String password
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_history_action.dart::RequestInfromation" {
+  +int userId
+  +int dataId
+  +int typeTableId
+  +Map<String, dynamic> toApiUserShare()
+  +Map<String, dynamic> toApiHistoryAction()
+  +Map<String, dynamic> toApiDataInformation()
+}
+
+class "passmanager_diplom::data::api::request::request_new_login.dart::RequestNewLogin" {
+  +int id
+  +String login
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_new_password.dart::RequestNewPassword" {
+  +int id
+  +String newPassword
+  +String oldPassword
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_new_user_name.dart::RequestNewUserName" {
+  +int id
+  +String userName
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_notes_create.dart::RequestNotesCreate" {
+  +String? notesName
+  +String? content
+  +String? description
+  +int? userId
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_notes_update.dart::RequestNotesUpdate" {
+  +String? notesName
+  +String? content
+  +String? description
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_sing_in.dart::RequestSingIn" {
+  +String login
+  +String password
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_sing_up.dart::RequestSingUp" {
+  +String userName
+  +String login
+  +String password
+  +Map<String, dynamic> toApi()
+}
+
+class "passmanager_diplom::data::api::request::request_trash.dart::RequestTrash" {
+  +int id
+  +int typeTable
+  +Map<String, dynamic> toJson()
+}
+
+class "passmanager_diplom::data::api::request::request_trash_list.dart::RequestTrashList" {
+  +List<RequestTrash> trash
+  +String toApi()
+}
+
+class "passmanager_diplom::data::api::service::sunrice_service.dart::SunriseService" {
+  {static} -String _BASE_URL
+  -Dio _dio
+  +Future<ApiUser> singUp()
+  +Future<ApiUser> singIn()
+  +Future<ApiConfirmation> confirmation()
+  +Future<ApiNotes> notesCreate()
+  +Future<List<ApiNotes>> notesIndex()
+  +Future<ApiNotes> notesUpdate()
+  +Future<ApiNotes> notesDelete()
+  +Future<ApiAccount> accountCreate()
+  +Future<List<ApiAccount>> accountIndex()
+  +Future<ApiAccount> accountUpdate()
+  +Future<ApiAccount> accountDelete()
+  +Future<List<ApiData>> dataIndex()
+  +Future<List<ApiData>> trashIndex()
+  +Future<bool> deleteData()
+  +Future<bool> deleteAllData()
+  +Future<bool> restorationAllData()
+  +Future<bool> restorationData()
+  +Future<List<ApiHistoryAction>> indexHistoryAction()
+  +Future<List<ApiUserShare>> indexUserShare()
+  +Future<ApiDataInformation> indexDataInformation()
+  +Future<ApiValidationNewPassword> newPassword()
+  +Future<ApiValidationNewLogin> newLogin()
+  +Future<ApiValidationNewUserName> newUserName()
+  +Future<ApiConfirmationNewLogin> confirmatioNewLogin()
+}
+
+"passmanager_diplom::data::api::service::sunrice_service.dart::SunriseService" o-- "dio::src::dio.dart::Dio"
+
+class "passmanager_diplom::data::mapper::account_mapper.dart::AccountMapper" {
+  {static} +Account fromApi()
+}
+
+class "passmanager_diplom::data::mapper::confirmation_mapper.dart::ConfirmationMapper" {
+  {static} +Confirmation fropApi()
+}
+
+class "passmanager_diplom::data::mapper::confirmation_new_login_mapper.dart::ConfirmatioNewLoginMapper" {
+  {static} +ConfirmationNewLogin fromApi()
+}
+
+class "passmanager_diplom::data::mapper::data_information_mapper.dart::DataInformationMapper" {
+  {static} +DataInformation fromApi()
+}
+
+class "passmanager_diplom::data::mapper::data_mapper.dart::DataMapper" {
+  {static} +Data fromApi()
+}
+
+class "passmanager_diplom::data::mapper::history_action_mapper.dart::HistoryActionMapper" {
+  {static} +HistoryAction fromApi()
+}
+
+class "passmanager_diplom::data::mapper::notes_mapper.dart::NotesMapper" {
+  {static} +Notes fromApi()
+}
+
+class "passmanager_diplom::data::mapper::trash_data_mapper.dart::TrashDataMapper" {
+  {static} +TrashData fromApi()
+}
+
+class "passmanager_diplom::data::mapper::user_mapper.dart::UserMapper" {
+  {static} +User fropApi()
+}
+
+class "passmanager_diplom::data::mapper::user_share_mapper.dart::UserShareMapper" {
+  {static} +UserShare fromApi()
+}
+
+class "passmanager_diplom::data::mapper::validation_account_mapper.dart::ValidationAccountMapper" {
+  {static} +ValidationAccount fropApi()
+}
+
+class "passmanager_diplom::data::mapper::validation_mapper.dart::ValidationAuthMapper" {
+  {static} +ValidationAuth fropApi()
+}
+
+class "passmanager_diplom::data::mapper::validation_new_login_mapper.dart::ValidationNewLoginMapper" {
+  {static} +ValidationNewLogin fromApi()
+}
+
+class "passmanager_diplom::data::mapper::validation_new_password_mapper.dart::ValidationNewPasswordMapper" {
+  {static} +ValidationNewPassword fromApi()
+}
+
+class "passmanager_diplom::data::mapper::validation_new_user_name_mapper.dart::ValidationNewUserNameMapper" {
+  {static} +ValidationNewUserName fromApi()
+}
+
+class "passmanager_diplom::data::mapper::validation_notes_mapper.dart::ValidationNotesMapper" {
+  {static} +ValidationNotes fropApi()
+}
+
+class "passmanager_diplom::domain::model::account.dart::Account" {
+  +int id
+  +String accountName
+  +String login
+  +String password
+  +String description
+  +DateTime createAt
+  +bool isCreator
+  +int userId
+  +ValidationAccount? validationAccount
+}
+
+"passmanager_diplom::domain::model::account.dart::Account" o-- "passmanager_diplom::domain::model::validation_account.dart::ValidationAccount"
+
+class "passmanager_diplom::domain::model::confirmation.dart::Confirmation" {
+  +int number
+  +String userName
+  +String login
+  +String password
+  +ValidationAuth? validationAuth
+}
+
+"passmanager_diplom::domain::model::confirmation.dart::Confirmation" o-- "passmanager_diplom::domain::model::validation_auth.dart::ValidationAuth"
+
+class "passmanager_diplom::domain::model::confirmation_new_login.dart::ConfirmationNewLogin" {
+  +int number
+  +ValidationNewLogin? validationNewLogin
+}
+
+"passmanager_diplom::domain::model::confirmation_new_login.dart::ConfirmationNewLogin" o-- "passmanager_diplom::domain::model::validation_new_login.dart::ValidationNewLogin"
+
+class "passmanager_diplom::domain::model::data.dart::Data" {
+  +int id
+  +String name
+  +DateTime createAt
+  +bool isCreator
+  +TypeTable typeTable
+}
+
+"passmanager_diplom::domain::model::data.dart::Data" o-- "passmanager_diplom::constant::type_table.dart::TypeTable"
+
+class "passmanager_diplom::domain::model::data_information.dart::DataInformation" {
+  +int userId
+  +List<InformationText> informationText
+}
+
+class "passmanager_diplom::domain::model::history_action.dart::HistoryAction" {
+  +int userId
+  +String userName
+  +String typeAction
+  +String actionDate
+}
+
+class "passmanager_diplom::domain::model::information_text.dart::InformationText" {
+  +String title
+  +String content
+}
+
+class "passmanager_diplom::domain::model::notes.dart::Notes" {
+  +int id
+  +String notesName
+  +String content
+  +String description
+  +DateTime createAt
+  +bool isCreator
+  +int userId
+  +ValidationNotes? validationNotes
+}
+
+"passmanager_diplom::domain::model::notes.dart::Notes" o-- "passmanager_diplom::domain::model::validation_notes.dart::ValidationNotes"
+
+class "passmanager_diplom::domain::model::trash.dart::Trash" {
+  +int id
+  +int typeTable
+}
+
+class "passmanager_diplom::domain::model::trash_data.dart::TrashData" {
+  +int id
+  +String name
+  +DateTime createAt
+  +bool isCreator
+  +TypeTable typeTable
+  +bool isCheck
+}
+
+"passmanager_diplom::domain::model::trash_data.dart::TrashData" o-- "passmanager_diplom::constant::type_table.dart::TypeTable"
+
+class "passmanager_diplom::domain::model::user.dart::User" {
+  +int id
+  +String userName
+  +String email
+  +ValidationAuth validationAuth
+}
+
+"passmanager_diplom::domain::model::user.dart::User" o-- "passmanager_diplom::domain::model::validation_auth.dart::ValidationAuth"
+
+class "passmanager_diplom::domain::model::user_share.dart::UserShare" {
+  +int userId
+  +String userLogin
+  +String userName
+  +DateTime createdShare
+}
+
+class "passmanager_diplom::domain::model::validation_account.dart::ValidationAccount" {
+  +String? accountName
+  +String? login
+  +String? password
+}
+
+class "passmanager_diplom::domain::model::validation_auth.dart::ValidationAuth" {
+  +String? userName
+  +String? login
+  +String? password
+}
+
+class "passmanager_diplom::domain::model::validation_new_login.dart::ValidationNewLogin" {
+  +String? login
+}
+
+class "passmanager_diplom::domain::model::validation_new_password.dart::ValidationNewPassword" {
+  +String? newPassword
+  +String? oldPassword
+}
+
+class "passmanager_diplom::domain::model::validation_new_user_name.dart::ValidationNewUserName" {
+  +String? userName
+}
+
+class "passmanager_diplom::domain::model::validation_notes.dart::ValidationNotes" {
+  +String? notesName
+  +String? content
+  +String? description
+}
+
+class "passmanager_diplom::domain::repository::auth_data_repository.dart::AuthDataRepository" {
+  -ApiUtil _apiUtil
+  +Future<User> singIn()
+  +Future<User> singUp()
+  +Future<Confirmation> confirmation()
+  +Future<ValidationNewPassword> newPassword()
+  +Future<ValidationNewUserName> newUserName()
+  +Future<ValidationNewLogin> newLogin()
+  +Future<ConfirmationNewLogin> confirmationNewLogin()
+}
+
+"passmanager_diplom::domain::repository::auth_data_repository.dart::AuthDataRepository" o-- "passmanager_diplom::data::api::api_util.dart::ApiUtil"
+"passmanager_diplom::domain::repository::auth_repository.dart::AuthRepository" <|-- "passmanager_diplom::domain::repository::auth_data_repository.dart::AuthDataRepository"
+
+abstract class "passmanager_diplom::domain::repository::auth_repository.dart::AuthRepository" {
+  +Future<User> singUp()
+  +Future<User> singIn()
+  +Future<Confirmation> confirmation()
+  +Future<ConfirmationNewLogin> confirmationNewLogin()
+  +Future<ValidationNewLogin> newLogin()
+  +Future<ValidationNewPassword> newPassword()
+  +Future<ValidationNewUserName> newUserName()
+}
+
+abstract class "passmanager_diplom::domain::repository::crud_account_repository.dart::CRUDAccountRepository" {
+  +Future<Account> create()
+  +Future<Account> update()
+  +Future<List<Account>> index()
+  +Future<Account> logicDelete()
+}
+
+class "passmanager_diplom::domain::repository::crud_data_account_repository.dart::CRUDDataAccountRepository" {
+  -ApiUtil _apiUtil
+  +Future<Account> create()
+  +Future<List<Account>> index()
+  +Future<Account> logicDelete()
+  +Future<Account> update()
+}
+
+"passmanager_diplom::domain::repository::crud_data_account_repository.dart::CRUDDataAccountRepository" o-- "passmanager_diplom::data::api::api_util.dart::ApiUtil"
+"passmanager_diplom::domain::repository::crud_account_repository.dart::CRUDAccountRepository" <|-- "passmanager_diplom::domain::repository::crud_data_account_repository.dart::CRUDDataAccountRepository"
+
+class "passmanager_diplom::domain::repository::crud_data_notes_repository.dart::CRUDDataNotesRepository" {
+  -ApiUtil _apiUtil
+  +Future<Notes> create()
+  +Future<List<Notes>> index()
+  +Future<Notes> logicDelete()
+  +Future<Notes> update()
+}
+
+"passmanager_diplom::domain::repository::crud_data_notes_repository.dart::CRUDDataNotesRepository" o-- "passmanager_diplom::data::api::api_util.dart::ApiUtil"
+"passmanager_diplom::domain::repository::crud_notes_repository.dart::CRUDNotesRepository" <|-- "passmanager_diplom::domain::repository::crud_data_notes_repository.dart::CRUDDataNotesRepository"
+
+class "passmanager_diplom::domain::repository::crud_data_repository.dart::CRUDDataRepository" {
+  -SharedPreferences? _preferences
+  +void create()
+  +void delete()
+  +Future<User> read()
+  +void update()
+}
+
+"passmanager_diplom::domain::repository::crud_data_repository.dart::CRUDDataRepository" o-- "shared_preferences::shared_preferences.dart::SharedPreferences"
+"passmanager_diplom::domain::repository::crud_reposittiry.dart::CRUDRepository" <|-- "passmanager_diplom::domain::repository::crud_data_repository.dart::CRUDDataRepository"
+
+abstract class "passmanager_diplom::domain::repository::crud_notes_repository.dart::CRUDNotesRepository" {
+  +Future<Notes> create()
+  +Future<Notes> update()
+  +Future<List<Notes>> index()
+  +Future<Notes> logicDelete()
+}
+
+abstract class "passmanager_diplom::domain::repository::crud_reposittiry.dart::CRUDRepository" {
+  +void create()
+  +Future<User> read()
+  +void update()
+  +void delete()
+}
+
+class "passmanager_diplom::domain::repository::data_data_repository.dart::DataDataRepository" {
+  -ApiUtil _apiUtil
+  +Future<List<Data>> index()
+}
+
+"passmanager_diplom::domain::repository::data_data_repository.dart::DataDataRepository" o-- "passmanager_diplom::data::api::api_util.dart::ApiUtil"
+"passmanager_diplom::domain::repository::data_repository.dart::DataRepository" <|-- "passmanager_diplom::domain::repository::data_data_repository.dart::DataDataRepository"
+
+abstract class "passmanager_diplom::domain::repository::data_repository.dart::DataRepository" {
+  +Future<List<Data>> index()
+}
+
+class "passmanager_diplom::domain::repository::information_data_repository.dart::InformationDataRepository" {
+  -ApiUtil _apiUtil
+  +Future<DataInformation> indexDataInformation()
+  +Future<List<UserShare>> indexUserShare()
+  +Future<List<HistoryAction>> indexhistoryAction()
+}
+
+"passmanager_diplom::domain::repository::information_data_repository.dart::InformationDataRepository" o-- "passmanager_diplom::data::api::api_util.dart::ApiUtil"
+"passmanager_diplom::domain::repository::information_repository.dart::InformationRepository" <|-- "passmanager_diplom::domain::repository::information_data_repository.dart::InformationDataRepository"
+
+abstract class "passmanager_diplom::domain::repository::information_repository.dart::InformationRepository" {
+  +Future<List<HistoryAction>> indexhistoryAction()
+  +Future<List<UserShare>> indexUserShare()
+  +Future<DataInformation> indexDataInformation()
+}
+
+class "passmanager_diplom::domain::repository::trash_data_repository.dart::TrashDataRepository" {
+  -ApiUtil _apiUtil
+  +Future<bool> delete()
+  +Future<bool> deleteAll()
+  +Future<List<TrashData>> index()
+  +Future<bool> restoration()
+  +Future<bool> restorationAll()
+}
+
+"passmanager_diplom::domain::repository::trash_data_repository.dart::TrashDataRepository" o-- "passmanager_diplom::data::api::api_util.dart::ApiUtil"
+"passmanager_diplom::domain::repository::trash_repository.dart::TrashRepository" <|-- "passmanager_diplom::domain::repository::trash_data_repository.dart::TrashDataRepository"
+
+abstract class "passmanager_diplom::domain::repository::trash_repository.dart::TrashRepository" {
+  +Future<List<TrashData>> index()
+  +Future<bool> deleteAll()
+  +Future<bool> restorationAll()
+  +Future<bool> delete()
+  +Future<bool> restoration()
+}
+
+class "passmanager_diplom::domain::state::account::account_cubit.dart::AccountCubit" {
+  -DataCubit _dataCubit
+  +TextEditingController accountName
+  +TextEditingController login
+  +TextEditingController password
+  +TextEditingController description
+  +ValidationAccount? valid
+  +void accountCreate()
+  +void accountUpdate()
+  +void notesDelete()
+  +void onCancel()
+  +void init()
+}
+
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountCubit" o-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit"
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountCubit" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountCubit" o-- "passmanager_diplom::domain::model::validation_account.dart::ValidationAccount"
+"bloc::src::cubit.dart::Cubit" <|-- "passmanager_diplom::domain::state::account::account_cubit.dart::AccountCubit"
+
+abstract class "passmanager_diplom::domain::state::account::account_cubit.dart::AccountState" {
+}
+
+class "passmanager_diplom::domain::state::account::account_cubit.dart::AccountInitial" {
+}
+
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountState" <|-- "passmanager_diplom::domain::state::account::account_cubit.dart::AccountInitial"
+
+class "passmanager_diplom::domain::state::account::account_cubit.dart::AccountLoad" {
+}
+
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountState" <|-- "passmanager_diplom::domain::state::account::account_cubit.dart::AccountLoad"
+
+class "passmanager_diplom::domain::state::account::account_cubit.dart::AccountCreate" {
+  +Account account
+}
+
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountCreate" o-- "passmanager_diplom::domain::model::account.dart::Account"
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountState" <|-- "passmanager_diplom::domain::state::account::account_cubit.dart::AccountCreate"
+
+class "passmanager_diplom::domain::state::account::account_cubit.dart::AccountUpdate" {
+  +Account account
+}
+
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountUpdate" o-- "passmanager_diplom::domain::model::account.dart::Account"
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountState" <|-- "passmanager_diplom::domain::state::account::account_cubit.dart::AccountUpdate"
+
+class "passmanager_diplom::domain::state::account::account_cubit.dart::AccountSucces" {
+}
+
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountState" <|-- "passmanager_diplom::domain::state::account::account_cubit.dart::AccountSucces"
+
+class "passmanager_diplom::domain::state::account::account_cubit.dart::AccountCancel" {
+}
+
+"passmanager_diplom::domain::state::account::account_cubit.dart::AccountState" <|-- "passmanager_diplom::domain::state::account::account_cubit.dart::AccountCancel"
+
+class "passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit" {
+  +DataRepository dataRepository
+  +CRUDNotesRepository crudNotesRepository
+  +CRUDAccountRepository crudAccountRepository
+  -List<Data> _dataList
+  -List<Notes> _notesList
+  -List<Account> _accountList
+  +bool isInit
+  +void drawer()
+  +Data dataMapper()
+  +void initData()
+  +void addNotes()
+  +void updateNotes()
+  +void addAccount()
+  +void updateAccount()
+  +void onExit()
+  +void onDelete()
+  +Future<dynamic> onRefresh()
+  +void restoration()
+}
+
+"passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit" o-- "passmanager_diplom::domain::repository::data_repository.dart::DataRepository"
+"passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit" o-- "passmanager_diplom::domain::repository::crud_notes_repository.dart::CRUDNotesRepository"
+"passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit" o-- "passmanager_diplom::domain::repository::crud_account_repository.dart::CRUDAccountRepository"
+"bloc::src::cubit.dart::Cubit" <|-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit"
+
+abstract class "passmanager_diplom::domain::state::data::data_cubit.dart::DataState" {
+  +List<Data> dataList
+  +List<Notes> notesList
+  +List<Account> accountList
+}
+
+class "passmanager_diplom::domain::state::data::data_cubit.dart::DataInitial" {
+}
+
+"passmanager_diplom::domain::state::data::data_cubit.dart::DataState" <|-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataInitial"
+
+class "passmanager_diplom::domain::state::data::data_cubit.dart::DataLoad" {
+}
+
+"passmanager_diplom::domain::state::data::data_cubit.dart::DataState" <|-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataLoad"
+
+class "passmanager_diplom::domain::state::data::data_cubit.dart::DataResponse" {
+  +List<Data> dataList
+  +List<Notes> notesList
+  +List<Account> accountList
+}
+
+"passmanager_diplom::domain::state::data::data_cubit.dart::DataState" <|-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataResponse"
+
+class "passmanager_diplom::domain::state::data::data_cubit.dart::DrawerUpdate" {
+  +User user
+}
+
+"passmanager_diplom::domain::state::data::data_cubit.dart::DrawerUpdate" o-- "passmanager_diplom::domain::model::user.dart::User"
+"passmanager_diplom::domain::state::data::data_cubit.dart::DataState" <|-- "passmanager_diplom::domain::state::data::data_cubit.dart::DrawerUpdate"
+
+class "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionCubit" {
+  -InformationRepository _informationRepository
+  +void init()
+}
+
+"passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionCubit" o-- "passmanager_diplom::domain::repository::information_repository.dart::InformationRepository"
+"bloc::src::cubit.dart::Cubit" <|-- "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionCubit"
+
+abstract class "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionState" {
+  +List<HistoryAction> historyActionList
+  +List<UserShare> userShareList
+  +DataInformation dataInformation
+  +bool isSuccesHistoryAction
+  +bool isSuccesUserShare
+  +bool isSuccesDataInformation
+}
+
+"passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionState" o-- "passmanager_diplom::domain::model::data_information.dart::DataInformation"
+
+class "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionInitial" {
+}
+
+"passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionState" <|-- "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionInitial"
+
+class "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionLoad" {
+}
+
+"passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionState" <|-- "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionLoad"
+
+class "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionResponse" {
+  +List<HistoryAction> historyActionList
+  +List<UserShare> userShareList
+  +DataInformation dataInformation
+}
+
+"passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionResponse" o-- "passmanager_diplom::domain::model::data_information.dart::DataInformation"
+"passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionState" <|-- "passmanager_diplom::domain::state::data_description::data_information_cubit.dart::DataDescriptionResponse"
+
+class "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesCubit" {
+  -DataCubit _dataCubit
+  +void notesCreate()
+  +void notesUpdate()
+  +void notesDelete()
+}
+
+"passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesCubit" o-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit"
+"bloc::src::cubit.dart::Cubit" <|-- "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesCubit"
+
+abstract class "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesState" {
+}
+
+class "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesInitial" {
+}
+
+"passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesState" <|-- "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesInitial"
+
+class "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesLoad" {
+}
+
+"passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesState" <|-- "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesLoad"
+
+class "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesAddResponse" {
+  +Notes notes
+  +bool isSeccus
+}
+
+"passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesAddResponse" o-- "passmanager_diplom::domain::model::notes.dart::Notes"
+"passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesState" <|-- "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesAddResponse"
+
+class "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesCansel" {
+}
+
+"passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesState" <|-- "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesCansel"
+
+class "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesUpdate" {
+  +Notes notes
+  +bool isSeccus
+}
+
+"passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesUpdate" o-- "passmanager_diplom::domain::model::notes.dart::Notes"
+"passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesState" <|-- "passmanager_diplom::domain::state::notes::notes_cubit.dart::NotesUpdate"
+
+class "passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit" {
+  -DataCubit _dataCubit
+  -AuthRepository _authRepository
+  -CRUDRepository _crudRepository
+  +TextEditingController userNameController
+  +TextEditingController loginController
+  +TextEditingController pinPut
+  +TextEditingController newPassword
+  +TextEditingController oldPassword
+  +bool isLoadUserName
+  +bool isChangeUserName
+  +bool isLoadLogin
+  +bool isChangeLogin
+  +bool isPinCode
+  +String saveUserName
+  +String saveLogin
+  +String code
+  +ValidationNewUserName? validationNewUserName
+  +ValidationNewLogin? validationNewLogin
+  +ValidationNewPassword? validationNewPassword
+  +void init()
+  +void newUserName()
+  +void confirmationNewLogin()
+  +void newLogin()
+  +void newPassoword()
+  -void _showSnackBar()
+}
+
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit" o-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit"
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit" o-- "passmanager_diplom::domain::repository::auth_repository.dart::AuthRepository"
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit" o-- "passmanager_diplom::domain::repository::crud_reposittiry.dart::CRUDRepository"
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit" o-- "passmanager_diplom::domain::model::validation_new_user_name.dart::ValidationNewUserName"
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit" o-- "passmanager_diplom::domain::model::validation_new_login.dart::ValidationNewLogin"
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit" o-- "passmanager_diplom::domain::model::validation_new_password.dart::ValidationNewPassword"
+"bloc::src::cubit.dart::Cubit" <|-- "passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsCubit"
+
+abstract class "passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsState" {
+}
+
+class "passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsInitial" {
+}
+
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsState" <|-- "passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsInitial"
+
+class "passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsNewUserName" {
+}
+
+"passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsState" <|-- "passmanager_diplom::domain::state::settings::settings_cubit.dart::SettingsNewUserName"
+
+class "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInCubit" {
+  -AuthRepository _authRepository
+  -CRUDRepository _crudRepository
+  +void SingIn()
+}
+
+"passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInCubit" o-- "passmanager_diplom::domain::repository::auth_repository.dart::AuthRepository"
+"passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInCubit" o-- "passmanager_diplom::domain::repository::crud_reposittiry.dart::CRUDRepository"
+"bloc::src::cubit.dart::Cubit" <|-- "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInCubit"
+
+abstract class "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInState" {
+}
+
+class "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInInitial" {
+}
+
+"passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInState" <|-- "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInInitial"
+
+class "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInLoad" {
+}
+
+"passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInState" <|-- "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInLoad"
+
+class "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInResponce" {
+  +User user
+  +bool isSucces
+}
+
+"passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInResponce" o-- "passmanager_diplom::domain::model::user.dart::User"
+"passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInState" <|-- "passmanager_diplom::domain::state::sing_in::sing_in_cubit.dart::SingInResponce"
+
+class "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpCubit" {
+  -AuthRepository _authRepository
+  +void singUp()
+}
+
+"passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpCubit" o-- "passmanager_diplom::domain::repository::auth_repository.dart::AuthRepository"
+"bloc::src::cubit.dart::Cubit" <|-- "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpCubit"
+
+abstract class "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpState" {
+  +Confirmation confirmation
+  +bool isSucces
+}
+
+"passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpState" o-- "passmanager_diplom::domain::model::confirmation.dart::Confirmation"
+
+class "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpInitial" {
+}
+
+"passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpState" <|-- "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpInitial"
+
+class "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpLoad" {
+}
+
+"passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpState" <|-- "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpLoad"
+
+class "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpResponce" {
+  +Confirmation confirmation
+  +bool isSucces
+}
+
+"passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpResponce" o-- "passmanager_diplom::domain::model::confirmation.dart::Confirmation"
+"passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpState" <|-- "passmanager_diplom::domain::state::sing_up::sing_up_cubit.dart::SingUpResponce"
+
+class "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashCubit" {
+  -TrashRepository _trashRepository
+  -DataCubit _dataCubit
+  +List<TrashData> trashList
+  +List<Trash> trashSelectList
+  +bool isSelect
+  +bool isPressed
+  +void init()
+  +Future<dynamic> onRefresh()
+  +void selectDataAll()
+  +void selectData()
+  +void closeSelect()
+  +void selectCheckChanged()
+  +String selectText()
+  +void restorationAll()
+  +void restoration()
+  +void deleteAll()
+  +void delete()
+}
+
+"passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashCubit" o-- "passmanager_diplom::domain::repository::trash_repository.dart::TrashRepository"
+"passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashCubit" o-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit"
+"bloc::src::cubit.dart::Cubit" <|-- "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashCubit"
+
+abstract class "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashState" {
+  +bool isPressed
+}
+
+class "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashInitial" {
+}
+
+"passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashState" <|-- "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashInitial"
+
+class "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashLoad" {
+}
+
+"passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashState" <|-- "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashLoad"
+
+class "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashResponse" {
+  +List<TrashData> trashList
+}
+
+"passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashState" <|-- "passmanager_diplom::domain::state::tash::trash_cubit.dart::TrashResponse"
+
+class "passmanager_diplom::internal::application.dart::Application" {
+  +bool isAuth
+  +AppRouter router
+  +Widget build()
+}
+
+"passmanager_diplom::internal::application.dart::Application" o-- "passmanager_diplom::internal::dependencies::router.dart::AppRouter"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "passmanager_diplom::internal::application.dart::Application"
+
+class "passmanager_diplom::internal::dependencies::api_module.dart::ApiModule" {
+  {static} -ApiUtil? _apiUtil
+  {static} +ApiUtil apiUtil()
+}
+
+"passmanager_diplom::internal::dependencies::api_module.dart::ApiModule" o-- "passmanager_diplom::data::api::api_util.dart::ApiUtil"
+
+class "passmanager_diplom::internal::dependencies::generate_color.dart::GenerateColor" {
+  {static} +List<Color> colorAvatar
+  {static} +Color generate()
+}
+
+class "passmanager_diplom::internal::dependencies::repository_module.dart::RepositoryModule" {
+  {static} -AuthRepository? _authRepository
+  {static} -CRUDRepository? _crudRepository
+  {static} -CRUDNotesRepository? _crudNotesRepository
+  {static} -CRUDAccountRepository? _crudAccountRepository
+  {static} -DataRepository? _dataRepository
+  {static} -TrashRepository? _trashRepository
+  {static} -InformationRepository? _informationRepository
+  {static} +AuthRepository authRepository()
+  {static} +CRUDRepository crudRepository()
+  {static} +CRUDNotesRepository crudNotesRepository()
+  {static} +CRUDAccountRepository crudAccountRepository()
+  {static} +DataRepository dataRepository()
+  {static} +TrashRepository trashRepository()
+  {static} +InformationRepository infromationRepository()
+}
+
+"passmanager_diplom::internal::dependencies::repository_module.dart::RepositoryModule" o-- "passmanager_diplom::domain::repository::auth_repository.dart::AuthRepository"
+"passmanager_diplom::internal::dependencies::repository_module.dart::RepositoryModule" o-- "passmanager_diplom::domain::repository::crud_reposittiry.dart::CRUDRepository"
+"passmanager_diplom::internal::dependencies::repository_module.dart::RepositoryModule" o-- "passmanager_diplom::domain::repository::crud_notes_repository.dart::CRUDNotesRepository"
+"passmanager_diplom::internal::dependencies::repository_module.dart::RepositoryModule" o-- "passmanager_diplom::domain::repository::crud_account_repository.dart::CRUDAccountRepository"
+"passmanager_diplom::internal::dependencies::repository_module.dart::RepositoryModule" o-- "passmanager_diplom::domain::repository::data_repository.dart::DataRepository"
+"passmanager_diplom::internal::dependencies::repository_module.dart::RepositoryModule" o-- "passmanager_diplom::domain::repository::trash_repository.dart::TrashRepository"
+"passmanager_diplom::internal::dependencies::repository_module.dart::RepositoryModule" o-- "passmanager_diplom::domain::repository::information_repository.dart::InformationRepository"
+
+class "passmanager_diplom::internal::dependencies::router.dart::AppRouter" {
+  +User userAuth
+  -DataCubit _dataCubit
+  +Route<dynamic>? generateRouter()
+}
+
+"passmanager_diplom::internal::dependencies::router.dart::AppRouter" o-- "passmanager_diplom::domain::model::user.dart::User"
+"passmanager_diplom::internal::dependencies::router.dart::AppRouter" o-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit"
+
+class "passmanager_diplom::presentation::mobile::account::account.dart::Accounts" {
+  +User user
+  +State<Accounts> createState()
+}
+
+"passmanager_diplom::presentation::mobile::account::account.dart::Accounts" o-- "passmanager_diplom::domain::model::user.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::account::account.dart::Accounts"
+
+class "passmanager_diplom::presentation::mobile::account::account.dart::_AccountsState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::account::account.dart::_AccountsState"
+
+class "passmanager_diplom::presentation::mobile::account::account_add.dart::AccountAdd" {
+  +int userId
+  +State<AccountAdd> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::account::account_add.dart::AccountAdd"
+
+class "passmanager_diplom::presentation::mobile::account::account_add.dart::_AccountAddState" {
+  -GlobalKey<FormState> _formKey
+  -ValidationAccount? _valid
+  -bool _isObscure
+  -String _accountName
+  -String _login
+  -String _password
+  -String _description
+  +Widget build()
+  -Widget _form()
+}
+
+"passmanager_diplom::presentation::mobile::account::account_add.dart::_AccountAddState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"passmanager_diplom::presentation::mobile::account::account_add.dart::_AccountAddState" o-- "passmanager_diplom::domain::model::validation_account.dart::ValidationAccount"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::account::account_add.dart::_AccountAddState"
+
+class "passmanager_diplom::presentation::mobile::account::account_show_update.dart::AccountShowUpdate" {
+  +Account account
+  +State<AccountShowUpdate> createState()
+}
+
+"passmanager_diplom::presentation::mobile::account::account_show_update.dart::AccountShowUpdate" o-- "passmanager_diplom::domain::model::account.dart::Account"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::account::account_show_update.dart::AccountShowUpdate"
+
+class "passmanager_diplom::presentation::mobile::account::account_show_update.dart::_AccountShowUpdateState" {
+  -GlobalKey<FormState> _formKey
+  +void initState()
+  +Widget build()
+}
+
+"passmanager_diplom::presentation::mobile::account::account_show_update.dart::_AccountShowUpdateState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::account::account_show_update.dart::_AccountShowUpdateState"
+
+class "passmanager_diplom::presentation::mobile::confirmation.dart::Confirmation" {
+  +Confirmation confirmation
+  +State<Confirmation> createState()
+}
+
+"passmanager_diplom::presentation::mobile::confirmation.dart::Confirmation" o-- "passmanager_diplom::domain::model::confirmation.dart::Confirmation"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::confirmation.dart::Confirmation"
+
+class "passmanager_diplom::presentation::mobile::confirmation.dart::_ConfirmationState" {
+  +Confirmation confirmation
+  -TextEditingController _pinPutController
+  +Widget build()
+  -void _showSnackBar()
+}
+
+"passmanager_diplom::presentation::mobile::confirmation.dart::_ConfirmationState" o-- "passmanager_diplom::domain::model::confirmation.dart::Confirmation"
+"passmanager_diplom::presentation::mobile::confirmation.dart::_ConfirmationState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::confirmation.dart::_ConfirmationState"
+
+class "passmanager_diplom::presentation::mobile::data_description.dart::DataDescription" {
+  +int dataId
+  +TypeTable typeTable
+  +State<DataDescription> createState()
+}
+
+"passmanager_diplom::presentation::mobile::data_description.dart::DataDescription" o-- "passmanager_diplom::constant::type_table.dart::TypeTable"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::data_description.dart::DataDescription"
+
+class "passmanager_diplom::presentation::mobile::data_description.dart::_DataDescriptionState" {
+  +void initState()
+  +Widget build()
+  -Widget _text()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::data_description.dart::_DataDescriptionState"
+
+class "passmanager_diplom::presentation::mobile::files.dart::Files" {
+  +User user
+  +State<Files> createState()
+}
+
+"passmanager_diplom::presentation::mobile::files.dart::Files" o-- "passmanager_diplom::domain::model::user.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::files.dart::Files"
+
+class "passmanager_diplom::presentation::mobile::files.dart::_FilesState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::files.dart::_FilesState"
+
+class "passmanager_diplom::presentation::mobile::files_add.dart::FilesAdd" {
+  +State<FilesAdd> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::files_add.dart::FilesAdd"
+
+class "passmanager_diplom::presentation::mobile::files_add.dart::_FilesAddState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::files_add.dart::_FilesAddState"
+
+class "passmanager_diplom::presentation::mobile::home.dart::Home" {
+  +User user
+  +State<Home> createState()
+}
+
+"passmanager_diplom::presentation::mobile::home.dart::Home" o-- "passmanager_diplom::domain::model::user.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::home.dart::Home"
+
+class "passmanager_diplom::presentation::mobile::home.dart::_HomeState" {
+  +void initState()
+  +Widget build()
+  +Widget iconTabletype()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::home.dart::_HomeState"
+
+class "passmanager_diplom::presentation::mobile::notes::notes.dart::Notes" {
+  +User user
+  +State<Notes> createState()
+}
+
+"passmanager_diplom::presentation::mobile::notes::notes.dart::Notes" o-- "passmanager_diplom::domain::model::user.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::notes::notes.dart::Notes"
+
+class "passmanager_diplom::presentation::mobile::notes::notes.dart::_NotesState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::notes::notes.dart::_NotesState"
+
+class "passmanager_diplom::presentation::mobile::notes::notes_add.dart::NotesAdd" {
+  +int userId
+  +State<NotesAdd> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::notes::notes_add.dart::NotesAdd"
+
+class "passmanager_diplom::presentation::mobile::notes::notes_add.dart::_NotesAddState" {
+  -ValidationNotes? _valid
+  -String _notesName
+  -String _content
+  -String _description
+  -GlobalKey<FormState> _formKey
+  +Widget build()
+  -Widget _form()
+}
+
+"passmanager_diplom::presentation::mobile::notes::notes_add.dart::_NotesAddState" o-- "passmanager_diplom::domain::model::validation_notes.dart::ValidationNotes"
+"passmanager_diplom::presentation::mobile::notes::notes_add.dart::_NotesAddState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::notes::notes_add.dart::_NotesAddState"
+
+class "passmanager_diplom::presentation::mobile::notes::notes_show_update.dart::NotesShowUpdate" {
+  +Notes notes
+  +State<NotesShowUpdate> createState()
+}
+
+"passmanager_diplom::presentation::mobile::notes::notes_show_update.dart::NotesShowUpdate" o-- "passmanager_diplom::domain::model::notes.dart::Notes"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::notes::notes_show_update.dart::NotesShowUpdate"
+
+class "passmanager_diplom::presentation::mobile::notes::notes_show_update.dart::_NotesShowUpdateState" {
+  +TextEditingController notesNameController
+  +TextEditingController contentController
+  +TextEditingController descriptionController
+  -ValidationNotes? _validNotes
+  -GlobalKey<FormState> _formKey
+  +void initState()
+  +void cancel()
+  +Widget build()
+}
+
+"passmanager_diplom::presentation::mobile::notes::notes_show_update.dart::_NotesShowUpdateState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"passmanager_diplom::presentation::mobile::notes::notes_show_update.dart::_NotesShowUpdateState" o-- "passmanager_diplom::domain::model::validation_notes.dart::ValidationNotes"
+"passmanager_diplom::presentation::mobile::notes::notes_show_update.dart::_NotesShowUpdateState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::notes::notes_show_update.dart::_NotesShowUpdateState"
+
+class "passmanager_diplom::presentation::mobile::settings.dart::Settings" {
+  +User user
+  +State<Settings> createState()
+}
+
+"passmanager_diplom::presentation::mobile::settings.dart::Settings" o-- "passmanager_diplom::domain::model::user.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::settings.dart::Settings"
+
+class "passmanager_diplom::presentation::mobile::settings.dart::_SettingsState" {
+  +bool isEditUserName
+  +bool isEditLogin
+  -GlobalKey<FormState> _formKeyUserName
+  -GlobalKey<FormState> _formKeyLogin
+  -GlobalKey<FormState> _formKeyPassword
+  +void initState()
+  +Widget build()
+  -void _shoModal()
+  -Widget _code()
+}
+
+"passmanager_diplom::presentation::mobile::settings.dart::_SettingsState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::settings.dart::_SettingsState"
+
+class "passmanager_diplom::presentation::mobile::sing_in.dart::SingIn" {
+  +State<SingIn> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::sing_in.dart::SingIn"
+
+class "passmanager_diplom::presentation::mobile::sing_in.dart::_SingInState" {
+  -bool _isObscure
+  -String _login
+  -String _password
+  -ValidationAuth _validationAuth
+  -GlobalKey<FormState> _formKey
+  +Widget build()
+  -Widget _from()
+}
+
+"passmanager_diplom::presentation::mobile::sing_in.dart::_SingInState" o-- "passmanager_diplom::domain::model::validation_auth.dart::ValidationAuth"
+"passmanager_diplom::presentation::mobile::sing_in.dart::_SingInState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::sing_in.dart::_SingInState"
+
+class "passmanager_diplom::presentation::mobile::sing_up.dart::SingUp" {
+  +State<SingUp> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::sing_up.dart::SingUp"
+
+class "passmanager_diplom::presentation::mobile::sing_up.dart::_SingUpState" {
+  +bool isObscure
+  -String _userName
+  -String _login
+  -String _password
+  -ValidationAuth _valid
+  -GlobalKey<FormState> _formKey
+  +Widget build()
+  -Widget _form()
+}
+
+"passmanager_diplom::presentation::mobile::sing_up.dart::_SingUpState" o-- "passmanager_diplom::domain::model::validation_auth.dart::ValidationAuth"
+"passmanager_diplom::presentation::mobile::sing_up.dart::_SingUpState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::sing_up.dart::_SingUpState"
+
+class "passmanager_diplom::presentation::mobile::trash.dart::Trash" {
+  +int userId
+  +State<Trash> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::mobile::trash.dart::Trash"
+
+class "passmanager_diplom::presentation::mobile::trash.dart::_TrashState" {
+  +void initState()
+  +Widget build()
+  -Widget _rowBottomSheet()
+  -Widget _iconTabletype()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::mobile::trash.dart::_TrashState"
+
+class "passmanager_diplom::presentation::widgets::action_long_press.dart::ActionLongPress" {
+  +int id
+  +TypeTable typeTable
+  +DataCubit cubit
+  +dynamic show()
+  +dynamic onNavigationDataDescription()
+  -Widget _allerDialogDelete()
+}
+
+"passmanager_diplom::presentation::widgets::action_long_press.dart::ActionLongPress" o-- "passmanager_diplom::constant::type_table.dart::TypeTable"
+"passmanager_diplom::presentation::widgets::action_long_press.dart::ActionLongPress" o-- "passmanager_diplom::domain::state::data::data_cubit.dart::DataCubit"
+
+class "passmanager_diplom::presentation::widgets::custom_filed.dart::CustomField" {
+  +bool isObscure
+  +TextEditingController? controller
+  +String labelText
+  +int? maxLength
+  +int? minLines
+  +int? maxLines
+  +String? Function(String?)? validation
+  +_CustomFieldState createState()
+}
+
+"passmanager_diplom::presentation::widgets::custom_filed.dart::CustomField" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"passmanager_diplom::presentation::widgets::custom_filed.dart::CustomField" o-- "flutter::src::widgets::form.dart::String Function(String)"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::widgets::custom_filed.dart::CustomField"
+
+class "passmanager_diplom::presentation::widgets::custom_filed.dart::_CustomFieldState" {
+  +bool isObscure
+  +Color borderColor
+  +String saveValue
+  +void initState()
+  -Color _borderColor()
+  +Widget build()
+}
+
+"passmanager_diplom::presentation::widgets::custom_filed.dart::_CustomFieldState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::widgets::custom_filed.dart::_CustomFieldState"
+
+class "passmanager_diplom::presentation::widgets::custom_search.dart::CustomSearch" {
+  +List<Widget>? buildActions()
+  +Widget? buildLeading()
+  +Widget buildResults()
+  +Widget buildSuggestions()
+}
+
+"flutter::src::material::search.dart::SearchDelegate" <|-- "passmanager_diplom::presentation::widgets::custom_search.dart::CustomSearch"
+
+class "passmanager_diplom::presentation::widgets::data_action.dart::DataAction" {
+  +dynamic Function(int) onSelected
+  +Widget build()
+}
+
+"passmanager_diplom::presentation::widgets::data_action.dart::DataAction" o-- "null::dynamic Function(int)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "passmanager_diplom::presentation::widgets::data_action.dart::DataAction"
+
+class "passmanager_diplom::presentation::widgets::drawer.dart::AppDrawer" {
+  +User user
+  +Widget build()
+  +Widget itemDrawer()
+}
+
+"passmanager_diplom::presentation::widgets::drawer.dart::AppDrawer" o-- "passmanager_diplom::domain::model::user.dart::User"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "passmanager_diplom::presentation::widgets::drawer.dart::AppDrawer"
+
+class "passmanager_diplom::presentation::widgets::edit_personal_data_user.dart::EditPersonalDataUser" {
+  +dynamic Function()? onSave
+  +TextEditingController? controller
+  +String? Function(String?)? validation
+  +String content
+  +String save
+  +bool isChange
+  +bool isLoad
+  +dynamic maxLength
+  +State<EditPersonalDataUser> createState()
+}
+
+"passmanager_diplom::presentation::widgets::edit_personal_data_user.dart::EditPersonalDataUser" o-- "null::dynamic Function()"
+"passmanager_diplom::presentation::widgets::edit_personal_data_user.dart::EditPersonalDataUser" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"passmanager_diplom::presentation::widgets::edit_personal_data_user.dart::EditPersonalDataUser" o-- "flutter::src::widgets::form.dart::String Function(String)"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::widgets::edit_personal_data_user.dart::EditPersonalDataUser"
+
+class "passmanager_diplom::presentation::widgets::edit_personal_data_user.dart::_EditPersonalDataUserState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::widgets::edit_personal_data_user.dart::_EditPersonalDataUserState"
+
+class "passmanager_diplom::presentation::widgets::floating_action_button_custuom.dart::FloatingActionButtonCutom" {
+  +int userId
+  +State<FloatingActionButtonCutom> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::widgets::floating_action_button_custuom.dart::FloatingActionButtonCutom"
+
+class "passmanager_diplom::presentation::widgets::floating_action_button_custuom.dart::_FloatingActionButtonCutom" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::widgets::floating_action_button_custuom.dart::_FloatingActionButtonCutom"
+
+class "passmanager_diplom::presentation::widgets::floating_action_message.dart::FloatingActionMessage" {
+  +Color color
+  +_FloatingActionMessageState createState()
+}
+
+"passmanager_diplom::presentation::widgets::floating_action_message.dart::FloatingActionMessage" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "passmanager_diplom::presentation::widgets::floating_action_message.dart::FloatingActionMessage"
+
+class "passmanager_diplom::presentation::widgets::floating_action_message.dart::_FloatingActionMessageState" {
+  +Color color
+  +bool isCheck
+  +Widget build()
+}
+
+"passmanager_diplom::presentation::widgets::floating_action_message.dart::_FloatingActionMessageState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State" <|-- "passmanager_diplom::presentation::widgets::floating_action_message.dart::_FloatingActionMessageState"
+
+class "passmanager_diplom::presentation::widgets::floating_action_message.dart::_ShapesPainter" {
+  +Color color
+  +void paint()
+  +bool shouldRepaint()
+}
+
+"passmanager_diplom::presentation::widgets::floating_action_message.dart::_ShapesPainter" o-- "dart::ui::Color"
+"flutter::src::rendering::custom_paint.dart::CustomPainter" <|-- "passmanager_diplom::presentation::widgets::floating_action_message.dart::_ShapesPainter"
+
+
+@enduml
