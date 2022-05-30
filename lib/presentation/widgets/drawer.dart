@@ -124,7 +124,7 @@ class AppDrawer extends StatelessWidget {
                 },
               ),
               itemDrawer(
-                title: 'Козина',
+                title: 'Корзина',
                 icon: Icons.auto_delete_rounded,
                 onTap: () {
                   Navigator.pushNamed(context, UrlPage.trash,
@@ -132,13 +132,37 @@ class AppDrawer extends StatelessWidget {
                 },
               ),
               Expanded(flex: 1, child: Container()),
+              itemStatistic(
+                title: 'Файлы',
+                total: '0.95',
+                maxValue: '1',
+                value: 0.3,
+                type: 'ГБ',
+              ),
+              itemStatistic(
+                title: 'Заметки',
+                total: '50',
+                maxValue: '100',
+                value: 0.5,
+                type: 'шт',
+              ),
+              itemStatistic(
+                title: 'Аккаунты',
+                total: '100',
+                maxValue: '100',
+                value: 1,
+                type: 'шт',
+              ),
               itemDrawer(
                 title: 'Выход',
                 icon: Icons.exit_to_app_outlined,
                 onTap: () {
                   context.read<DataCubit>().onExit();
                   Navigator.pushNamedAndRemoveUntil(
-                      context, UrlPage.singIn, (route) => false);
+                    context,
+                    UrlPage.singIn,
+                    (route) => false,
+                  );
                 },
               ),
             ],
@@ -160,6 +184,35 @@ class AppDrawer extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
       onTap: () => onTap(),
+    );
+  }
+
+  Widget itemStatistic({
+    required String title,
+    required double value,
+    required String maxValue,
+    required String total,
+    required String type,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        children: [
+          SizedBox(width: 70, child: Text(title)),
+          Expanded(
+              child: LinearProgressIndicator(
+            minHeight: 7.5,
+            backgroundColor: Colors.grey,
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue[400]!),
+            value: value,
+          )),
+          Container(width: 10),
+          Container(
+              alignment: Alignment.center,
+              width: 75,
+              child: Text('${total}/$maxValue $type'))
+        ],
+      ),
     );
   }
 }

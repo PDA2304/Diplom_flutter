@@ -5,6 +5,8 @@ import 'package:passmanager_diplom/data/api/model/api_confirmation.dart';
 import 'package:passmanager_diplom/data/api/model/api_confirmation_new_login.dart';
 import 'package:passmanager_diplom/data/api/model/api_data.dart';
 import 'package:passmanager_diplom/data/api/model/api_data_information.dart';
+import 'package:passmanager_diplom/data/api/model/api_file.dart';
+import 'package:passmanager_diplom/data/api/model/api_file_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_history_action.dart';
 import 'package:passmanager_diplom/data/api/model/api_history_action_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes.dart';
@@ -18,6 +20,8 @@ import 'package:passmanager_diplom/data/api/model/api_validation_new_password.da
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
+import 'package:passmanager_diplom/data/api/request/request_file_create.dart';
+import 'package:passmanager_diplom/data/api/request/request_file_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_history_action.dart';
 import 'package:passmanager_diplom/data/api/request/request_new_login.dart';
 import 'package:passmanager_diplom/data/api/request/request_new_password.dart';
@@ -27,7 +31,6 @@ import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
-import 'package:passmanager_diplom/domain/model/confirmation_new_login.dart';
 
 class SunriseService {
   static const _BASE_URL = 'http://192.168.157.128:8888/api/';
@@ -287,6 +290,63 @@ class SunriseService {
         return ApiConfirmationNewLogin.fromApi(e.response!.data);
       }
       return ApiConfirmationNewLogin.fromApi({'number': 0});
+    }
+  }
+
+  Future<ApiFile> createFile({required RequestFileCreate request}) async {
+    try {
+      var test = FormData.fromMap({
+        'user_id': request.userId,
+        'file_name': request.fileName,
+        'description': request.description,
+        'login': request.login,
+        'size': request.size,
+        'file': await MultipartFile.fromFile(request.file.path),
+      });
+      final response = await _dio.post('files', data: test);
+      return ApiFile.fromApi(response.data);
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.statusCode == 422)
+        return ApiFile.fromApi(e.response!.data);
+      return ApiFile.fromApi({});
+    }
+  }
+
+  Future<ApiFile> updateFile({required RequsetFileUpdate request}) async {
+    try {
+      var test = FormData.fromMap({
+        '_method': 'PUT',
+        'id': request.id,
+        'file_name': request.fileName,
+        'description': request.description,
+        'size': request.size,
+        'file': await MultipartFile.fromFile(request.file.path),
+      });
+      final response = await _dio.post('files', data: test);
+      return ApiFile.fromApi(response.data);
+    } on DioError catch (e) {
+      if (e.response != null && e.response!.statusCode == 422)
+        return ApiFile.fromApi(e.response!.data);
+      return ApiFile.fromApi({});
+    }
+  }
+
+  Future<List<ApiFile>> indexFile(int userId) async {
+    try {
+      final response = await _dio.get('files/user/$userId');
+      return ApiFileList.fromApi(response.data).list;
+    } on DioError catch (e) {
+      return <ApiFile>[];
+    }
+  }
+
+  Future<bool> filesDelete(int id) async {
+    try {
+      await _dio.delete('files/logicDelete/$id');
+      return true;
+    } on DioError catch (e) {
+      print(e.message);
+      return false;
     }
   }
 }

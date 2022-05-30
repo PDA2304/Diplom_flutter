@@ -12,21 +12,21 @@ import 'package:passmanager_diplom/presentation/widgets/drawer.dart';
 import 'package:passmanager_diplom/presentation/widgets/floating_action_button_custuom.dart';
 import 'package:passmanager_diplom/presentation/widgets/floating_action_message.dart';
 
-class Notes extends StatefulWidget {
-  const Notes({Key? key, required this.user}) : super(key: key);
+class Files extends StatefulWidget {
+  const Files({Key? key, required this.user}) : super(key: key);
   final User user;
 
   @override
-  State<Notes> createState() => _NotesState();
+  State<Files> createState() => _FilesState();
 }
 
-class _NotesState extends State<Notes> {
+class _FilesState extends State<Files> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Заметки'),
+        title: const Text('Файлы'),
         actions: [
           IconButton(
             onPressed: () {
@@ -39,18 +39,17 @@ class _NotesState extends State<Notes> {
           )
         ],
       ),
-      drawer: AppDrawer(user: widget.user),
       floatingActionButton: FloatingActionButtonCutom(user: widget.user),
+      drawer: AppDrawer(user: widget.user),
       body: BlocBuilder<DataCubit, DataState>(
         builder: (context, state) {
           if ((state) is DataLoad) {
             return const Center(child: CircularProgressIndicator());
           }
-
-          return (state.notesList.isEmpty)
+          return (state.filesList.isEmpty)
               ? RefreshIndicator(
                   onRefresh: () => context.read<DataCubit>().onRefresh(
-                        typetable: TypeTable.notes,
+                        typetable: TypeTable.files,
                         userId: widget.user.id,
                       ),
                   child: ScrollConfiguration(
@@ -68,7 +67,7 @@ class _NotesState extends State<Notes> {
                             children: <Widget>[
                               Expanded(child: Container()),
                               const Text(
-                                "Добавьте первую заметку",
+                                "Добавьте первый файл",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 30,
@@ -78,7 +77,7 @@ class _NotesState extends State<Notes> {
                               ),
                               const Padding(padding: EdgeInsets.all(2.5)),
                               const Text(
-                                "Ваши данные всегда под рукой. \nВыможете хранить свои заметки.",
+                                "Ваши данные всегда под рукой. \nВыможете хранить свои файлы.",
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.blue,
@@ -108,7 +107,7 @@ class _NotesState extends State<Notes> {
                 )
               : RefreshIndicator(
                   onRefresh: () => context.read<DataCubit>().onRefresh(
-                      typetable: TypeTable.notes, userId: widget.user.id),
+                      typetable: TypeTable.files, userId: widget.user.id),
                   child: ScrollConfiguration(
                     behavior: ScrollConfiguration.of(context).copyWith(
                       dragDevices: {
@@ -117,39 +116,41 @@ class _NotesState extends State<Notes> {
                       },
                     ),
                     child: ListView.builder(
-                        itemCount: state.notesList.length,
-                        itemBuilder: (context, count) {
-                          return Card(
-                            child: InkWell(
-                              onLongPress: () {
-                                ActionLongPress(
-                                        id: state.notesList[count].id,
-                                        typeTable: TypeTable.notes,
-                                        cubit: context.read<DataCubit>())
-                                    .show(context);
-                              },
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  UrlPage.notesShowUpdate,
-                                  arguments: state.notesList[count],
-                                );
-                              },
-                              child: ListTile(
-                                title: Text(state.notesList[count].notesName),
-                                leading: state.notesList[count].isCreator
-                                    ? null
-                                    : const Icon(
-                                        Icons.share,
-                                      ),
-                                subtitle: Text(DateFormat('d MMMM y', 'ru')
-                                    .format(state.notesList[count].createAt)),
-                                trailing: const Icon(
-                                    Icons.arrow_forward_ios_outlined),
-                              ),
+                      itemCount: state.filesList.length,
+                      itemBuilder: (context, count) {
+                        return Card(
+                          child: InkWell(
+                            onLongPress: () {
+                              // ! Нужно сделать
+                              ActionLongPress(
+                                      id: state.filesList[count].id,
+                                      typeTable: TypeTable.files,
+                                      cubit: context.read<DataCubit>())
+                                  .show(context);
+                            },
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                UrlPage.filesShowUpdate,
+                                arguments: state.filesList[count],
+                              );
+                            },
+                            child: ListTile(
+                              title: Text(state.filesList[count].fileName),
+                              leading: state.filesList[count].isCreator
+                                  ? null
+                                  : const Icon(
+                                      Icons.share,
+                                    ),
+                              subtitle: Text(DateFormat('d MMMM y', 'ru')
+                                  .format(state.filesList[count].createdAt)),
+                              trailing:
+                                  const Icon(Icons.arrow_forward_ios_outlined),
                             ),
-                          );
-                        }),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 );
         },

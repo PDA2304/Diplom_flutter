@@ -2,8 +2,10 @@ import 'package:passmanager_diplom/domain/repository/auth_data_repository.dart';
 import 'package:passmanager_diplom/domain/repository/auth_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_account_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_data_account_repository.dart';
+import 'package:passmanager_diplom/domain/repository/crud_data_files_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_data_notes_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_data_repository.dart';
+import 'package:passmanager_diplom/domain/repository/crud_files_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_notes_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_reposittiry.dart';
 import 'package:passmanager_diplom/domain/repository/data_data_repository.dart';
@@ -18,6 +20,7 @@ class RepositoryModule {
   static AuthRepository? _authRepository;
   static CRUDRepository? _crudRepository;
   static CRUDNotesRepository? _crudNotesRepository;
+  static CRUDFilesRepository? _crudFilesRepository;
   static CRUDAccountRepository? _crudAccountRepository;
   static DataRepository? _dataRepository;
   static TrashRepository? _trashRepository;
@@ -41,6 +44,11 @@ class RepositoryModule {
   static CRUDAccountRepository crudAccountRepository() {
     _crudAccountRepository ??= CRUDDataAccountRepository(ApiModule.apiUtil());
     return _crudAccountRepository!;
+  }
+
+  static CRUDFilesRepository crudFilesRepository() {
+    _crudFilesRepository ??= CRUDDataFilesRepository(ApiModule.apiUtil());
+    return _crudFilesRepository!;
   }
 
   static DataRepository dataRepository() {

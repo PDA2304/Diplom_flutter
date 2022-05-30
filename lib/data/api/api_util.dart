@@ -1,7 +1,10 @@
+import 'dart:io' as io;
 import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
+import 'package:passmanager_diplom/data/api/request/request_file_create.dart';
+import 'package:passmanager_diplom/data/api/request/request_file_update.dart';
 import 'package:passmanager_diplom/data/api/request/request_history_action.dart';
 import 'package:passmanager_diplom/data/api/request/request_new_login.dart';
 import 'package:passmanager_diplom/data/api/request/request_new_password.dart';
@@ -18,6 +21,7 @@ import 'package:passmanager_diplom/data/mapper/confirmation_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/confirmation_new_login_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/data_information_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/data_mapper.dart';
+import 'package:passmanager_diplom/data/mapper/file_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/history_action_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/notes_mapper.dart';
 import 'package:passmanager_diplom/data/mapper/trash_data_mapper.dart';
@@ -31,6 +35,7 @@ import 'package:passmanager_diplom/domain/model/confirmation.dart';
 import 'package:passmanager_diplom/domain/model/confirmation_new_login.dart';
 import 'package:passmanager_diplom/domain/model/data.dart';
 import 'package:passmanager_diplom/domain/model/data_information.dart';
+import 'package:passmanager_diplom/domain/model/files.dart';
 import 'package:passmanager_diplom/domain/model/history_action.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
 import 'package:passmanager_diplom/domain/model/trash.dart';
@@ -270,5 +275,53 @@ class ApiUtil {
     final request = RequestNewLogin(id: id, login: login);
     final result = await _sunriseService.confirmatioNewLogin(request: request);
     return ConfirmatioNewLoginMapper.fromApi(result);
+  }
+
+  Future<File> createFile({
+    required int userId,
+    required String fileName,
+    required String description,
+    required String login,
+    required int size,
+    required io.File file,
+  }) async {
+    final request = RequestFileCreate(
+      userId: userId,
+      fileName: fileName,
+      description: description,
+      login: login,
+      size: size,
+      file: file,
+    );
+    final result = await _sunriseService.createFile(request: request);
+    return FileMapper.fromApi(result);
+  }
+
+  Future<File> updateFile({
+    required int id,
+    required String fileName,
+    required String description,
+    required int size,
+    required io.File file,
+  }) async {
+    final request = RequsetFileUpdate(
+      id: id,
+      fileName: fileName,
+      description: description,
+      size: size,
+      file: file,
+    );
+    final result = await _sunriseService.updateFile(request: request);
+    return FileMapper.fromApi(result);
+  }
+
+  Future<List<File>> indexFile(int userId) async {
+    final result = await _sunriseService.indexFile(userId);
+    return result.map((e) => FileMapper.fromApi(e)).toList();
+  }
+
+  Future<bool> filesDelete({required int id}) async {
+    final result = await _sunriseService.filesDelete(id);
+    return result;
   }
 }

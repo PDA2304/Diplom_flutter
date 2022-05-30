@@ -49,7 +49,7 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Просмотр / Изменнение заметки'),
+        title: const Text('Просмотр / Редактирование заметки'),
         actions: [
           DataAction(onSelected: (item) {
             switch (item) {

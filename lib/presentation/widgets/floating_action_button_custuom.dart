@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
+import 'package:passmanager_diplom/domain/model/user.dart';
 
 class FloatingActionButtonCutom extends StatefulWidget {
-  const FloatingActionButtonCutom({Key? key, required this.userId})
+  const FloatingActionButtonCutom({Key? key, required this.user})
       : super(key: key);
-  final int userId;
+  final User user;
 
   @override
   State<FloatingActionButtonCutom> createState() =>
@@ -24,23 +25,33 @@ class _FloatingActionButtonCutom extends State<FloatingActionButtonCutom> {
                 title: const Text('Аккаунты'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, UrlPage.accountAdd,
-                      arguments: widget.userId);
+                  Navigator.pushNamed(
+                    context,
+                    UrlPage.accountAdd,
+                    arguments: widget.user.id,
+                  );
                 },
               ),
               ListTile(
                 title: const Text('Файл'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, UrlPage.filesAdd);
+                  Navigator.pushNamed(
+                    context,
+                    UrlPage.filesAdd,
+                    arguments: widget.user,
+                  );
                 },
               ),
               ListTile(
                 title: const Text('Заметки'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, UrlPage.notesAdd,
-                      arguments: widget.userId);
+                  Navigator.pushNamed(
+                    context,
+                    UrlPage.notesAdd,
+                    arguments: widget.user.id,
+                  );
                 },
               ),
             ],

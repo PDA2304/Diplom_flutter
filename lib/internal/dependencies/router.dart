@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/account.dart' as ModelAccount;
 import 'package:passmanager_diplom/domain/model/confirmation.dart'
     as ModelConfirmation;
+import 'package:passmanager_diplom/domain/model/files.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart' as ModelNotes;
 import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/state/account/account_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data_description/data_information_cubit.dart';
+import 'package:passmanager_diplom/domain/state/files/files_cubit.dart';
 import 'package:passmanager_diplom/domain/state/notes/notes_cubit.dart';
 import 'package:passmanager_diplom/domain/state/settings/settings_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
@@ -21,8 +22,9 @@ import 'package:passmanager_diplom/presentation/mobile/account/account_show_upda
 import 'package:passmanager_diplom/presentation/mobile/account/account.dart';
 import 'package:passmanager_diplom/presentation/mobile/confirmation.dart';
 import 'package:passmanager_diplom/presentation/mobile/data_description.dart';
-import 'package:passmanager_diplom/presentation/mobile/files.dart';
-import 'package:passmanager_diplom/presentation/mobile/files_add.dart';
+import 'package:passmanager_diplom/presentation/mobile/file/files.dart';
+import 'package:passmanager_diplom/presentation/mobile/file/files_add.dart';
+import 'package:passmanager_diplom/presentation/mobile/file/files_show_update.dart';
 import 'package:passmanager_diplom/presentation/mobile/home.dart';
 import 'package:passmanager_diplom/presentation/mobile/notes/notes.dart';
 import 'package:passmanager_diplom/presentation/mobile/notes/notes_add.dart';
@@ -38,10 +40,10 @@ class AppRouter {
   AppRouter({required this.userAuth});
 
   final DataCubit _dataCubit = DataCubit(
-    dataRepository: RepositoryModule.dataRepository(),
-    crudNotesRepository: RepositoryModule.crudNotesRepository(),
-    crudAccountRepository: RepositoryModule.crudAccountRepository(),
-  );
+      dataRepository: RepositoryModule.dataRepository(),
+      crudNotesRepository: RepositoryModule.crudNotesRepository(),
+      crudAccountRepository: RepositoryModule.crudAccountRepository(),
+      crudFilesRepository: RepositoryModule.crudFilesRepository());
 
   Route<dynamic>? generateRouter(RouteSettings settings) {
     switch (settings.name) {
@@ -127,8 +129,10 @@ class AppRouter {
           var user = settings.arguments as User;
           return MaterialPageRoute(
             builder: (_) => BlocProvider(
-              create: (context) =>
-                  SettingsCubit(_dataCubit, RepositoryModule.authRepository(),RepositoryModule.crudRepository()),
+              create: (context) => SettingsCubit(
+                  _dataCubit,
+                  RepositoryModule.authRepository(),
+                  RepositoryModule.crudRepository()),
               child: Settings(user: user),
             ),
           );
@@ -158,8 +162,14 @@ class AppRouter {
         }
       case UrlPage.filesAdd:
         {
+          User user = settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => const FilesAdd(),
+            builder: (_) => BlocProvider(
+              create: (context) => FilesCubit(
+                _dataCubit,
+              ),
+              child: FilesAdd(user: user),
+            ),
           );
         }
       case UrlPage.notesAdd:
@@ -196,7 +206,18 @@ class AppRouter {
                     child: AccountShowUpdate(account: account),
                   ));
         }
-
+      case UrlPage.filesShowUpdate:
+        {
+          var files = settings.arguments as File;
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (context) => FilesCubit(_dataCubit),
+              child: FilesShowUpdate(
+                file: files,
+              ),
+            ),
+          );
+        }
       case UrlPage.dataDescription:
         {
           var t = settings.arguments as List;

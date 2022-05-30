@@ -29,7 +29,7 @@ class _AccountShowUpdateState extends State<AccountShowUpdate> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Просмотр / Изменние аккаунта'),
+        title: const Text('Просмотр / Редактирование аккаунта'),
         actions: [
           DataAction(
             onSelected: (item) {

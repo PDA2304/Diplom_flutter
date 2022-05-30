@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
-import 'package:passmanager_diplom/domain/state/account/account_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/presentation/widgets/action_long_press.dart';
 import 'package:passmanager_diplom/presentation/widgets/custom_search.dart';
@@ -40,7 +39,7 @@ class _AccountsState extends State<Accounts> {
         ],
       ),
       drawer: AppDrawer(user: widget.user),
-      floatingActionButton: FloatingActionButtonCutom(userId: widget.user.id),
+      floatingActionButton: FloatingActionButtonCutom(user: widget.user),
       body: BlocBuilder<DataCubit, DataState>(
         builder: (context, state) {
           if ((state) is DataLoad) {
@@ -50,7 +49,7 @@ class _AccountsState extends State<Accounts> {
           return (state.accountList.isEmpty)
               ? RefreshIndicator(
                   onRefresh: () => context.read<DataCubit>().onRefresh(
-                        typetable: TypeTable.data,
+                        typetable: TypeTable.account,
                         userId: widget.user.id,
                       ),
                   child: ScrollConfiguration(

@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
           return AppDrawer(user: widget.user);
         },
       ),
-      floatingActionButton: FloatingActionButtonCutom(userId: widget.user.id),
+      floatingActionButton: FloatingActionButtonCutom(user: widget.user),
       body: BlocBuilder<DataCubit, DataState>(
         builder: (context, state) {
           if ((state) is DataLoad) {
@@ -151,7 +151,17 @@ class _HomeState extends State<Home> {
                                   );
                                   break;
                                 case TypeTable.files:
-                                  break;
+                                  {
+                                    Navigator.pushNamed(
+                                      context,
+                                      UrlPage.filesShowUpdate,
+                                      arguments: state.filesList.firstWhere(
+                                          (element) =>
+                                              element.id ==
+                                              state.dataList[count].id),
+                                    );
+                                    break;
+                                  }
                                 case TypeTable.account:
                                   Navigator.pushNamed(
                                     context,

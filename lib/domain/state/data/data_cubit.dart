@@ -3,11 +3,13 @@ import 'package:meta/meta.dart';
 import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/domain/model/account.dart';
 import 'package:passmanager_diplom/domain/model/data.dart';
+import 'package:passmanager_diplom/domain/model/files.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart';
 import 'package:passmanager_diplom/domain/model/trash_data.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/model/validation_auth.dart';
 import 'package:passmanager_diplom/domain/repository/crud_account_repository.dart';
+import 'package:passmanager_diplom/domain/repository/crud_files_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_notes_repository.dart';
 import 'package:passmanager_diplom/domain/repository/data_repository.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
@@ -19,25 +21,25 @@ class DataCubit extends Cubit<DataState> {
     required this.dataRepository,
     required this.crudNotesRepository,
     required this.crudAccountRepository,
-  }) : super(DataInitial(const <Notes>[], const <Account>[], const <Data>[]));
+    required this.crudFilesRepository,
+  }) : super(DataInitial(const <Notes>[], const <Account>[], const <Data>[],
+            const <File>[]));
 
   final DataRepository dataRepository;
   final CRUDNotesRepository crudNotesRepository;
   final CRUDAccountRepository crudAccountRepository;
+  final CRUDFilesRepository crudFilesRepository;
 
   final List<Data> _dataList = <Data>[];
   final List<Notes> _notesList = <Notes>[];
   final List<Account> _accountList = <Account>[];
+  final List<File> _filesList = <File>[];
 
   bool isInit = false;
 
   void drawer(User user) {
-    emit(DrawerUpdate(
-      user,
-      state.notesList,
-      state.accountList,
-      state.dataList,
-    ));
+    emit(DrawerUpdate(user, state.notesList, state.accountList, state.dataList,
+        state.filesList));
   }
 
   Data dataMapper(TypeTable typeTable, dynamic data) {
@@ -54,12 +56,14 @@ class DataCubit extends Cubit<DataState> {
           );
         }
       case TypeTable.files:
+        File file = data as File;
         return Data(
-            id: 0,
-            name: '',
-            createAt: DateTime.now(),
-            isCreator: true,
-            typeTable: TypeTable.files);
+          id: file.id,
+          name: file.fileName,
+          createAt: file.createdAt,
+          isCreator: file.isCreator,
+          typeTable: TypeTable.files,
+        );
 
       case TypeTable.account:
         {
@@ -86,11 +90,13 @@ class DataCubit extends Cubit<DataState> {
 
   void initData(int userId) async {
     if (!isInit) {
-      emit(DataLoad(state.notesList, state.accountList, state.dataList));
+      emit(DataLoad(
+          state.notesList, state.accountList, state.dataList, state.filesList));
       _dataList.addAll(await dataRepository.index(userId: userId));
       _notesList.addAll(await crudNotesRepository.index(userId: userId));
+      _filesList.addAll(await crudFilesRepository.index(userId: userId));
       _accountList.addAll(await crudAccountRepository.index(userId: userId));
-      emit(DataResponse(_notesList, _accountList, _dataList));
+      emit(DataResponse(_notesList, _accountList, _dataList, _filesList));
       isInit = true;
     }
   }
@@ -98,7 +104,7 @@ class DataCubit extends Cubit<DataState> {
   void addNotes(Notes notes) {
     _notesList.insert(0, notes);
     _dataList.insert(0, dataMapper(TypeTable.notes, notes));
-    emit(DataResponse(_notesList, state.accountList, _dataList));
+    emit(DataResponse(_notesList, state.accountList, _dataList, _filesList));
   }
 
   void updateNotes(Notes notes) {
@@ -110,13 +116,13 @@ class DataCubit extends Cubit<DataState> {
         (element.id == notes.id) && (element.typeTable == TypeTable.notes));
     _notesList.insert(index, notes);
     _dataList.insert(dataIndex, dataMapper(TypeTable.notes, notes));
-    emit(DataResponse(_notesList, state.accountList, _dataList));
+    emit(DataResponse(_notesList, state.accountList, _dataList, _filesList));
   }
 
   void addAccount(Account account) {
     _accountList.insert(0, account);
     _dataList.insert(0, dataMapper(TypeTable.account, account));
-    emit(DataResponse(state.notesList, _accountList, _dataList));
+    emit(DataResponse(state.notesList, _accountList, _dataList, _filesList));
   }
 
   void updateAccount(Account account) {
@@ -128,7 +134,25 @@ class DataCubit extends Cubit<DataState> {
         (element.id == account.id) && (element.typeTable == TypeTable.account));
     _accountList.insert(index, account);
     _dataList.insert(dataIndex, dataMapper(TypeTable.account, account));
-    emit(DataResponse(state.notesList, _accountList, _dataList));
+    emit(DataResponse(state.notesList, _accountList, _dataList, _filesList));
+  }
+
+  void addFiles(File files) {
+    _filesList.insert(0, files);
+    _dataList.insert(0, dataMapper(TypeTable.files, files));
+    emit(DataResponse(state.notesList, _accountList, _dataList, _filesList));
+  }
+
+  void updateFiles(File files) {
+    int index = _filesList.indexWhere((element) => element.id == files.id);
+    int dataIndex = _dataList.indexWhere((element) =>
+        (element.id == files.id) && (element.typeTable == TypeTable.files));
+    _filesList.removeWhere((element) => element.id == files.id);
+    _dataList.removeWhere((element) =>
+        (element.id == files.id) && (element.typeTable == TypeTable.files));
+    _filesList.insert(index, files);
+    _dataList.insert(dataIndex, dataMapper(TypeTable.files, files));
+    emit(DataResponse(state.notesList, _accountList, _dataList, _filesList));
   }
 
   void onExit() {
@@ -151,6 +175,10 @@ class DataCubit extends Cubit<DataState> {
         }
       case TypeTable.files:
         {
+          _filesList.removeWhere((element) => element.id == id);
+          _dataList.removeWhere((element) =>
+              (element.id == id) && (element.typeTable == TypeTable.files));
+          crudFilesRepository.logicDelete(id: id);
           break;
         }
       case TypeTable.account:
@@ -164,14 +192,15 @@ class DataCubit extends Cubit<DataState> {
       case TypeTable.data:
         break;
     }
-    emit(DataResponse(_notesList, _accountList, _dataList));
+    emit(DataResponse(_notesList, _accountList, _dataList, _filesList));
   }
 
   Future onRefresh({
     required TypeTable typetable,
     required int userId,
   }) async {
-    emit(DataLoad(state.notesList, state.accountList, state.dataList));
+    emit(DataLoad(
+        state.notesList, state.accountList, state.dataList, state.filesList));
     switch (typetable) {
       case TypeTable.notes:
         {
@@ -181,6 +210,8 @@ class DataCubit extends Cubit<DataState> {
         }
       case TypeTable.files:
         {
+          _filesList.clear();
+          _filesList.addAll(await crudFilesRepository.index(userId: userId));
           break;
         }
       case TypeTable.account:
@@ -196,12 +227,13 @@ class DataCubit extends Cubit<DataState> {
           _dataList.addAll(await dataRepository.index(userId: userId));
         }
     }
-    emit(DataResponse(_notesList, _accountList, _dataList));
+    emit(DataResponse(_notesList, _accountList, _dataList, _filesList));
   }
 
   void restoration({required List<TrashData> data, required int userId}) async {
     _notesList.clear();
     _accountList.clear();
+    _filesList.clear();
     _dataList.addAll(data
         .map(
           (e) => Data(
@@ -219,6 +251,7 @@ class DataCubit extends Cubit<DataState> {
 
     _notesList.addAll(await crudNotesRepository.index(userId: userId));
     _accountList.addAll(await crudAccountRepository.index(userId: userId));
-    emit(DataResponse(_notesList, _accountList, _dataList));
+    _filesList.addAll(await crudFilesRepository.index(userId: userId));
+    emit(DataResponse(_notesList, _accountList, _dataList, _filesList));
   }
 }

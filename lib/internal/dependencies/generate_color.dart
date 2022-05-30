@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:passmanager_diplom/constant/type_extensions.dart';
 
 class GenerateColor {
   static const List<Color> colorAvatar = [
@@ -17,5 +18,24 @@ class GenerateColor {
   static Color generate(int userId) {
     int colorIndex = userId - ((userId / 10).ceil() * 10);
     return colorAvatar[colorIndex.abs()];
+  }
+
+  static Color generateExtension(String extension) {
+    int count =
+        TypeExtension.extensions.indexWhere((element) => element == extension);
+    print(count);
+    if (count <= 4) {
+      return Colors.orange;
+    }
+    if (count == 5) {
+      return Colors.red;
+    }
+    if (count <= 7) {
+      return Colors.green;
+    }
+    if (count <= 9) {
+      return Colors.blue;
+    }
+    return Colors.transparent;
   }
 }
