@@ -43,6 +43,7 @@ class FilesCubit extends Cubit<FilesState> {
     pathSaveFile =
         "${documentDirectory.path}/PassManager/${data.fileName}.$fileExtensions";
     if (!await io.File(pathSaveFile).exists()) {
+      isCheckFile = true;
       await dio.download(
         data.path,
         pathSaveFile,
@@ -54,7 +55,6 @@ class FilesCubit extends Cubit<FilesState> {
       );
     }
     isDowload = true;
-    isCheckFile = true;
     file = io.File(pathSaveFile);
     emit(FilesInitial());
 
