@@ -197,7 +197,8 @@ class _DataDescriptionState extends State<DataDescription> {
                                                 .userId),
                                         radius: 20,
                                         child: Text(
-                                          'state.dataInfo.userName!'[0],
+                                          state.historyActionList[index]
+                                              .userName[0],
                                           style: const TextStyle(
                                               color: Colors.white),
                                         ),
