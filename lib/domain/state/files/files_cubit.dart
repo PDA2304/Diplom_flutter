@@ -37,9 +37,8 @@ class FilesCubit extends Cubit<FilesState> {
     filesNameController.text = data.fileName;
     descriptionController.text = data.description;
     var documentDirectory = await getApplicationDocumentsDirectory();
-    fileExtensions = data.path.substring(
-        data.path.indexOf('.', data.path.indexOf('storage')) + 1,
-        data.path.length);
+    fileExtensions =
+        data.path.substring(data.path.lastIndexOf('.') + 1, data.path.length);
     pathSaveFile =
         "${documentDirectory.path}/PassManager/${data.fileName}.$fileExtensions";
     isCheckFile = true;

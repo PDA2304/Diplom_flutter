@@ -37,8 +37,8 @@ import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
 
 class SunriseService {
-  static const _BASE_URL = 'http://192.168.157.128:8888/api/'; //Local
-  //  static const _BASE_URL = 'http://89.208.210.91:8888/api/'; //Server
+  // static const _BASE_URL = 'http://192.168.157.128:8888/api/'; //Local
+  static const _BASE_URL = 'http://89.208.210.91:8888/api/'; //Server
 
   final Dio _dio = Dio(BaseOptions(
       baseUrl: _BASE_URL, connectTimeout: 10000, receiveTimeout: 10000));
