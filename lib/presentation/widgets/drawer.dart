@@ -131,28 +131,33 @@ class AppDrawer extends StatelessWidget {
                       arguments: user.id);
                 },
               ),
-              Expanded(flex: 1, child: Container()),
-              itemStatistic(
-                title: 'Файлы',
-                total: '0.95',
-                maxValue: '1',
-                value: 0.3,
-                type: 'ГБ',
-              ),
-              itemStatistic(
-                title: 'Заметки',
-                total: '50',
-                maxValue: '100',
-                value: 0.5,
-                type: 'шт',
-              ),
-              itemStatistic(
-                title: 'Аккаунты',
-                total: '100',
-                maxValue: '100',
-                value: 1,
-                type: 'шт',
-              ),
+              true
+                  ? Expanded(flex: 1, child: Container())
+                  : Column(
+                      children: [
+                        itemStatistic(
+                          title: 'Файлы',
+                          total: '0.95',
+                          maxValue: '1',
+                          value: 0.3,
+                          type: 'ГБ',
+                        ),
+                        itemStatistic(
+                          title: 'Заметки',
+                          total: '50',
+                          maxValue: '100',
+                          value: 0.5,
+                          type: 'шт',
+                        ),
+                        itemStatistic(
+                          title: 'Аккаунты',
+                          total: '100',
+                          maxValue: '100',
+                          value: 1,
+                          type: 'шт',
+                        ),
+                      ],
+                    ),
               itemDrawer(
                 title: 'Выход',
                 icon: Icons.exit_to_app_outlined,

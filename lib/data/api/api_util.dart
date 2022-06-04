@@ -2,6 +2,7 @@ import 'dart:io' as io;
 import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
+import 'package:passmanager_diplom/data/api/request/request_add_share_user.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
 import 'package:passmanager_diplom/data/api/request/request_file_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_file_update.dart';
@@ -9,6 +10,8 @@ import 'package:passmanager_diplom/data/api/request/request_history_action.dart'
 import 'package:passmanager_diplom/data/api/request/request_new_login.dart';
 import 'package:passmanager_diplom/data/api/request/request_new_password.dart';
 import 'package:passmanager_diplom/data/api/request/request_new_user_name.dart';
+import 'package:passmanager_diplom/data/api/request/request_remove_share_user.dart';
+import 'package:passmanager_diplom/data/api/request/request_search_user.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
@@ -323,5 +326,38 @@ class ApiUtil {
   Future<bool> filesDelete({required int id}) async {
     final result = await _sunriseService.filesDelete(id);
     return result;
+  }
+
+  Future<List<User>> searchUser({
+    required TypeTable typeTable,
+    required String search,
+    required int dataId,
+  }) async {
+    final request =
+        RequestSearchUser(typeTable: typeTable, search: search, dataId: dataId);
+    final result = await _sunriseService.searchUser(request);
+    return result.map((e) => UserMapper.fropApi(e)).toList();
+  }
+
+  Future<bool> addShareUser({
+    required int dataId,
+    required int userSenderId,
+    required TypeTable typeTable,
+    required List<int> userReceiver,
+  }) async {
+    final request =
+        RequestAddShareUser(dataId, userSenderId, typeTable, userReceiver);
+    return await _sunriseService.addShareUser(request);
+  }
+
+  Future<bool> removeShareUser({
+    required int dataId,
+    required int userSenderId,
+    required TypeTable typeTable,
+    required int userReceiverId,
+  }) async {
+    final request =
+        RequestRemoveShareUser(dataId, typeTable, userSenderId, userReceiverId);
+        return await  _sunriseService.removeShareUser(request);
   }
 }

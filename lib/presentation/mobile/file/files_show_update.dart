@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/constant/type_extensions.dart';
 import 'package:passmanager_diplom/constant/type_table.dart';
@@ -48,35 +49,42 @@ class _FilesShowUpdateState extends State<FilesShowUpdate> {
         backgroundColor: Colors.blue,
         title: const Text('Просмотр / Редактирование файла'),
         centerTitle: true,
-        actions: [
-          DataAction(onSelected: (item) {
-            switch (item) {
-              case 0:
-                {
-                  Navigator.pushNamed(context, UrlPage.dataDescription,
-                      arguments: [
-                        widget.file.id,
-                        TypeTable.files,
-                      ]);
-                  break;
-                }
-              case 1:
-                {
-                  break;
-                }
-              case 2:
-                {
-                  _cubit!.filesDelete(id: widget.file.id);
-                  Navigator.pop(context);
-                  break;
-                }
-              default:
-                {
-                  break;
-                }
-            }
-          })
-        ],
+        actions: widget.file.isCreator
+            ? [
+                DataAction(onSelected: (item) {
+                  switch (item) {
+                    case 0:
+                      {
+                        Navigator.pushNamed(context, UrlPage.dataDescription,
+                            arguments: [
+                              widget.file.id,
+                              TypeTable.files,
+                            ]);
+                        break;
+                      }
+                    case 1:
+                      {
+                        Navigator.pushNamed(context, UrlPage.addUserShare,
+                            arguments: [
+                              TypeTable.files,
+                              widget.file.id,
+                            ]);
+                        break;
+                      }
+                    case 2:
+                      {
+                        _cubit!.filesDelete(id: widget.file.id);
+                        Navigator.pop(context);
+                        break;
+                      }
+                    default:
+                      {
+                        break;
+                      }
+                  }
+                })
+              ]
+            : [],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -104,12 +112,14 @@ class _FilesShowUpdateState extends State<FilesShowUpdate> {
               child: Column(
                 children: [
                   CustomField(
+                    readOnly: !widget.file.isCreator,
                     validation: (value) => value = _valid!.fileName,
                     controller: _cubit!.filesNameController,
                     labelText: 'Название файла',
                   ),
                   Container(height: 15),
                   CustomField(
+                    readOnly: !widget.file.isCreator,
                     controller: _cubit!.descriptionController,
                     labelText: 'Описание',
                   ),
@@ -117,26 +127,28 @@ class _FilesShowUpdateState extends State<FilesShowUpdate> {
               ),
             ),
             Container(height: 15),
-            Row(
-              children: [
-                Expanded(child: Container()),
-                ElevatedButton(
-                  onPressed: () {
-                    _cubit!.cancel(widget.file);
-                  },
-                  child: Text('Отмена'),
-                ),
-                Container(
-                  width: 15,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _cubit!.update(widget.file);
-                  },
-                  child: Text('Сохранить'),
-                ),
-              ],
-            ),
+            widget.file.isCreator
+                ? Row(
+                    children: [
+                      Expanded(child: Container()),
+                      ElevatedButton(
+                        onPressed: () {
+                          _cubit!.cancel(widget.file);
+                        },
+                        child: Text('Отмена'),
+                      ),
+                      Container(
+                        width: 15,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          _cubit!.update(widget.file);
+                        },
+                        child: Text('Сохранить'),
+                      ),
+                    ],
+                  )
+                : Container(),
             Container(height: 15),
             _cubit!.isCheckFile
                 ? _cubit!.isDowload
@@ -203,18 +215,20 @@ class _FilesShowUpdateState extends State<FilesShowUpdate> {
               Positioned(
                 top: 1,
                 right: 0,
-                child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _cubit!.isCheckFile = false;
-                      _cubit!.file = io.File('');
-                    });
-                  },
-                  icon: const Icon(
-                    Icons.clear,
-                    color: Colors.white,
-                  ),
-                ),
+                child: widget.file.isCreator
+                    ? IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _cubit!.isCheckFile = false;
+                            _cubit!.file = io.File('');
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.clear,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Container(),
               ),
               Center(
                 child: Text(
@@ -245,18 +259,20 @@ class _FilesShowUpdateState extends State<FilesShowUpdate> {
           Positioned(
             top: 1,
             right: 0,
-            child: IconButton(
-              onPressed: () {
-                setState(() {
-                  _cubit!.isCheckFile = false;
-                  _cubit!.file = io.File('');
-                });
-              },
-              icon: const Icon(
-                Icons.clear,
-                color: Colors.black,
-              ),
-            ),
+            child: widget.file.isCreator
+                ? IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _cubit!.isCheckFile = false;
+                        _cubit!.file = io.File('');
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.clear,
+                      color: Colors.black,
+                    ),
+                  )
+                : Container(),
           ),
         ],
       ),

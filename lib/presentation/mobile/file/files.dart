@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
+import 'package:passmanager_diplom/domain/state/search_data/search_data_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/presentation/widgets/action_long_press.dart';
 import 'package:passmanager_diplom/presentation/widgets/custom_search.dart';
@@ -32,7 +33,10 @@ class _FilesState extends State<Files> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: CustomSearch(),
+                delegate: CustomSearch(
+                  TypeTable.files,
+                  context.read<SearchDataCubit>(),
+                ),
               );
             },
             icon: const Icon(Icons.search),

@@ -88,7 +88,7 @@ class FilesCubit extends Cubit<FilesState> {
       fileName: filesNameController.text,
       description: descriptionController.text,
       file: file,
-      size: data.size,
+      size: data.size == size ? data.size : size,
     );
     if (result.id == 0) {
       emit(FilesErorr(result));

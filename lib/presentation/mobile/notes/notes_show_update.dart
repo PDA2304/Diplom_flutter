@@ -50,35 +50,44 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Просмотр / Редактирование заметки'),
-        actions: [
-          DataAction(onSelected: (item) {
-            switch (item) {
-              case 0:
-                {
-                  Navigator.pushNamed(context, UrlPage.dataDescription,
-                      arguments: [
-                        widget.notes.id,
-                        TypeTable.notes,
-                      ]);
-                  break;
-                }
-              case 1:
-                {
-                  break;
-                }
-              case 2:
-                {
-                  context.read<NotesCubit>().notesDelete(id: widget.notes.id);
-                  Navigator.pop(context);
-                  break;
-                }
-              default:
-                {
-                  break;
-                }
-            }
-          })
-        ],
+        actions: widget.notes.isCreator
+            ? [
+                DataAction(onSelected: (item) {
+                  switch (item) {
+                    case 0:
+                      {
+                        Navigator.pushNamed(context, UrlPage.dataDescription,
+                            arguments: [
+                              widget.notes.id,
+                              TypeTable.notes,
+                            ]);
+                        break;
+                      }
+                    case 1:
+                      {
+                        Navigator.pushNamed(context, UrlPage.addUserShare,
+                            arguments: [
+                              TypeTable.notes,
+                              widget.notes.id,
+                            ]);
+                        break;
+                      }
+                    case 2:
+                      {
+                        context
+                            .read<NotesCubit>()
+                            .notesDelete(id: widget.notes.id);
+                        Navigator.pop(context);
+                        break;
+                      }
+                    default:
+                      {
+                        break;
+                      }
+                  }
+                })
+              ]
+            : [],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -99,6 +108,7 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
                   child: Column(
                     children: [
                       CustomField(
+                        readOnly: !widget.notes.isCreator,
                         validation: (value) =>
                             _validNotes == null ? null : _validNotes!.notesName,
                         controller: notesNameController,
@@ -107,6 +117,7 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
                       ),
                       const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                       CustomField(
+                        readOnly: !widget.notes.isCreator,
                         validation: (value) =>
                             _validNotes == null ? null : _validNotes!.content,
                         controller: contentController,
@@ -117,6 +128,7 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
                       ),
                       const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                       CustomField(
+                        readOnly: !widget.notes.isCreator,
                         validation: (value) => _validNotes == null
                             ? null
                             : _validNotes!.description,
@@ -130,40 +142,42 @@ class _NotesShowUpdateState extends State<NotesShowUpdate> {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                Row(
-                  children: [
-                    Expanded(child: Container()),
-                    SizedBox(
-                      height: 35,
-                      child: ElevatedButton(
-                        onPressed: () => cancel(),
-                        child: const Text(
-                          'Отмена',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10)),
-                    SizedBox(
-                      height: 35,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.read<NotesCubit>().notesUpdate(
-                                notesId: widget.notes.id,
-                                notesName: notesNameController.text,
-                                content: contentController.text,
-                                description: descriptionController.text,
-                              );
-                        },
-                        child: const Text(
-                          'Сохранить',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
+                widget.notes.isCreator
+                    ? Row(
+                        children: [
+                          Expanded(child: Container()),
+                          SizedBox(
+                            height: 35,
+                            child: ElevatedButton(
+                              onPressed: () => cancel(),
+                              child: const Text(
+                                'Отмена',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10)),
+                          SizedBox(
+                            height: 35,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                context.read<NotesCubit>().notesUpdate(
+                                      notesId: widget.notes.id,
+                                      notesName: notesNameController.text,
+                                      content: contentController.text,
+                                      description: descriptionController.text,
+                                    );
+                              },
+                              child: const Text(
+                                'Сохранить',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Container()
               ],
             );
           },

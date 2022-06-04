@@ -8,10 +8,13 @@ import 'package:passmanager_diplom/domain/model/files.dart';
 import 'package:passmanager_diplom/domain/model/notes.dart' as ModelNotes;
 import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/state/account/account_cubit.dart';
+import 'package:passmanager_diplom/domain/state/add_user_share/user_search_bloc.dart';
+import 'package:passmanager_diplom/domain/state/search_data/search_data_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
 import 'package:passmanager_diplom/domain/state/data_description/data_information_cubit.dart';
 import 'package:passmanager_diplom/domain/state/files/files_cubit.dart';
 import 'package:passmanager_diplom/domain/state/notes/notes_cubit.dart';
+import 'package:passmanager_diplom/domain/state/remove_user_share/remove_user_share_cubit.dart';
 import 'package:passmanager_diplom/domain/state/settings/settings_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_in/sing_in_cubit.dart';
 import 'package:passmanager_diplom/domain/state/sing_up/sing_up_cubit.dart';
@@ -20,6 +23,7 @@ import 'package:passmanager_diplom/internal/dependencies/repository_module.dart'
 import 'package:passmanager_diplom/presentation/mobile/account/account_add.dart';
 import 'package:passmanager_diplom/presentation/mobile/account/account_show_update.dart';
 import 'package:passmanager_diplom/presentation/mobile/account/account.dart';
+import 'package:passmanager_diplom/presentation/mobile/add_user_share.dart';
 import 'package:passmanager_diplom/presentation/mobile/confirmation.dart';
 import 'package:passmanager_diplom/presentation/mobile/data_description.dart';
 import 'package:passmanager_diplom/presentation/mobile/file/files.dart';
@@ -29,13 +33,14 @@ import 'package:passmanager_diplom/presentation/mobile/home.dart';
 import 'package:passmanager_diplom/presentation/mobile/notes/notes.dart';
 import 'package:passmanager_diplom/presentation/mobile/notes/notes_add.dart';
 import 'package:passmanager_diplom/presentation/mobile/notes/notes_show_update.dart';
+import 'package:passmanager_diplom/presentation/mobile/remove_user_share.dart';
 import 'package:passmanager_diplom/presentation/mobile/settings.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_in.dart';
 import 'package:passmanager_diplom/presentation/mobile/sing_up.dart';
 import 'package:passmanager_diplom/presentation/mobile/trash.dart';
 
 class AppRouter {
-  final User userAuth;
+  User userAuth;
 
   AppRouter({required this.userAuth});
 
@@ -79,9 +84,17 @@ class AppRouter {
           var user = settings.arguments == null
               ? userAuth
               : settings.arguments as User;
+          userAuth = user;
           return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: _dataCubit,
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _dataCubit,
+                ),
+                BlocProvider(
+                  create: (context) => SearchDataCubit(_dataCubit),
+                ),
+              ],
               child: Home(
                 user: user,
               ),
@@ -92,8 +105,15 @@ class AppRouter {
         {
           var user = settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: _dataCubit,
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _dataCubit,
+                ),
+                BlocProvider(
+                  create: (context) => SearchDataCubit(_dataCubit),
+                ),
+              ],
               child: Accounts(
                 user: user,
               ),
@@ -104,8 +124,15 @@ class AppRouter {
         {
           var user = settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: _dataCubit,
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _dataCubit,
+                ),
+                BlocProvider(
+                  create: (context) => SearchDataCubit(_dataCubit),
+                ),
+              ],
               child: Notes(
                 user: user,
               ),
@@ -116,8 +143,15 @@ class AppRouter {
         {
           var user = settings.arguments as User;
           return MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: _dataCubit,
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(
+                  value: _dataCubit,
+                ),
+                BlocProvider(
+                  create: (context) => SearchDataCubit(_dataCubit),
+                ),
+              ],
               child: Files(
                 user: user,
               ),
@@ -228,6 +262,37 @@ class AppRouter {
               child: DataDescription(
                 dataId: t[0],
                 typeTable: t[1],
+              ),
+            ),
+          );
+        }
+      case UrlPage.addUserShare:
+        {
+          var t = settings.arguments as List;
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (context) =>
+                  UserSearchBloc(RepositoryModule.authRepository()),
+              child: AddUserShare(
+                typeTable: t[0],
+                dataId: t[1],
+                userId: userAuth.id,
+              ),
+            ),
+          );
+        }
+      case UrlPage.removeUserShare:
+        {
+          var t = settings.arguments as List;
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (context) =>
+                  RemoveUserShareCubit(RepositoryModule.authRepository(), t[3]),
+              child: RemoveUserShare(
+                typeTable: t[0],
+                dataId: t[1],
+                list: t[2],
+                userSenderId: userAuth.id,
               ),
             ),
           );

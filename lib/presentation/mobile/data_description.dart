@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:passmanager_diplom/constant/type_table.dart';
+import 'package:passmanager_diplom/constant/url_pages.dart';
 import 'package:passmanager_diplom/domain/state/data_description/data_information_cubit.dart';
 import 'package:passmanager_diplom/internal/dependencies/generate_color.dart';
 
@@ -91,7 +92,14 @@ class _DataDescriptionState extends State<DataDescription> {
                     return Card(
                       elevation: 5.0,
                       child: InkWell(
-                        onDoubleTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, UrlPage.removeUserShare,arguments: [
+                            widget.typeTable,
+                            widget.dataId,
+                            state.userShareList,
+                            context.read<DataDescriptionCubit>()
+                          ]);
+                        },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 15.0, vertical: 10),

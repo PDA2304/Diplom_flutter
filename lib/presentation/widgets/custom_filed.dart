@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 
 class CustomField extends StatefulWidget {
   final bool isObscure;
+  final bool readOnly;
   final TextEditingController? controller;
   final String labelText;
   final int? maxLength;
   final int? minLines;
   final int? maxLines;
   final FormFieldValidator<String>? validation;
-
   CustomField({
     Key? key,
     this.isObscure = false,
+    this.readOnly = true,
     required this.controller,
     required this.labelText,
     this.maxLength,
@@ -55,6 +56,7 @@ class _CustomFieldState extends State<CustomField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: widget.readOnly,
       validator: widget.validation,
       maxLength: widget.maxLength,
       minLines: widget.minLines,

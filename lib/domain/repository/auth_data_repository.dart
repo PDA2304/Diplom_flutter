@@ -1,6 +1,8 @@
+import 'package:passmanager_diplom/constant/type_table.dart';
 import 'package:passmanager_diplom/data/api/api_util.dart';
 import 'package:passmanager_diplom/domain/model/confirmation.dart';
 import 'package:passmanager_diplom/domain/model/confirmation_new_login.dart';
+import 'package:passmanager_diplom/domain/model/share_user.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
 import 'package:passmanager_diplom/domain/model/validation_new_login.dart';
 import 'package:passmanager_diplom/domain/model/validation_new_password.dart';
@@ -76,5 +78,46 @@ class AuthDataRepository extends AuthRepository {
     required String login,
   }) {
     return _apiUtil.confirmationNewLogin(id: id, login: login);
+  }
+
+  @override
+  Future<List<ShareUser>> searchUser({
+    required TypeTable typeTable,
+    required String search,
+    required int dataId,
+  }) async {
+    return (await _apiUtil.searchUser(
+            typeTable: typeTable, search: search, dataId: dataId))
+        .map((e) => ShareUser(user: e))
+        .toList();
+  }
+
+  @override
+  Future<bool> addShareUser({
+    required int dataId,
+    required int userSenderId,
+    required TypeTable typeTable,
+    required List<int> userReceiver,
+  }) async {
+    return await _apiUtil.addShareUser(
+      dataId: dataId,
+      userSenderId: userSenderId,
+      typeTable: typeTable,
+      userReceiver: userReceiver,
+    );
+  }
+
+  @override
+  Future<bool> removeShareUser({
+    required int dataId,
+    required int userSenderId,
+    required TypeTable typeTable,
+    required int userReceiverId,
+  }) async {
+    return await _apiUtil.removeShareUser(
+        dataId: dataId,
+        userSenderId: userSenderId,
+        typeTable: typeTable,
+        userReceiverId: userReceiverId);
   }
 }

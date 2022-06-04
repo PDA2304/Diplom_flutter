@@ -1,4 +1,6 @@
-class UserShare {
+import 'package:equatable/equatable.dart';
+
+class UserShare extends Equatable {
   final int userId;
   final String userLogin;
   final String userName;
@@ -10,4 +12,7 @@ class UserShare {
     required this.userName,
     required this.createdShare,
   });
+
+  @override
+  List<Object?> get props => [userId, userLogin, userName, createdShare];
 }

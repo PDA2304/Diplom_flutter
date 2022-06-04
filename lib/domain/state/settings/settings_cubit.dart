@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:passmanager_diplom/domain/model/user.dart';
@@ -8,6 +10,7 @@ import 'package:passmanager_diplom/domain/model/validation_new_user_name.dart';
 import 'package:passmanager_diplom/domain/repository/auth_repository.dart';
 import 'package:passmanager_diplom/domain/repository/crud_reposittiry.dart';
 import 'package:passmanager_diplom/domain/state/data/data_cubit.dart';
+import 'package:path_provider/path_provider.dart';
 
 part 'settings_state.dart';
 
@@ -34,6 +37,8 @@ class SettingsCubit extends Cubit<SettingsState> {
   String saveLogin = '';
   String code = '';
 
+  String size = '';
+
   ValidationNewUserName? validationNewUserName;
   ValidationNewLogin? validationNewLogin;
   ValidationNewPassword? validationNewPassword;
@@ -41,6 +46,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   void init(String userName, String login) {
     userNameController.text = saveUserName = userName;
     loginController.text = saveLogin = login;
+    directorySize();
   }
 
   void newUserName(int id, BuildContext context) async {
@@ -153,5 +159,40 @@ class SettingsCubit extends Cubit<SettingsState> {
         elevation: 0,
       ),
     );
+  }
+
+  void directorySize() async {
+    var documentDirectory = await getApplicationDocumentsDirectory();
+    var dir = Directory("${documentDirectory.path}/PassManager");
+    int totalSize = 0;
+    try {
+      if (dir.existsSync()) {
+        dir
+            .listSync(recursive: true, followLinks: false)
+            .forEach((FileSystemEntity entity) {
+          if (entity is File) {
+            totalSize += entity.lengthSync();
+          }
+        });
+      } else {
+        size = "0";
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    size = totalSize > 1000000000
+        ? (totalSize / 1024 / 1024 / 1024).toStringAsFixed(2) + " ГБ"
+        : (totalSize / 1024 / 1024).toStringAsFixed(2) + ' МБ';
+    emit(SettingsInitial());
+  }
+
+  void deleteFile() async {
+    var documentDirectory = await getApplicationDocumentsDirectory();
+    var dir = Directory("${documentDirectory.path}/PassManager");
+    if (dir.existsSync()) {
+      dir.deleteSync(recursive: true);
+      size = '0';
+      emit(SettingsInitial());
+    }
   }
 }

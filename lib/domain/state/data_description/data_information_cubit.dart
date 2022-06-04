@@ -40,4 +40,11 @@ class DataDescriptionCubit extends Cubit<DataDescriptionState> {
       });
     });
   }
+
+  void removeShareUser(int userReceiverId) {
+    var list = state.userShareList.toList();
+    list.removeWhere((element) => element.userId == userReceiverId);
+    emit(DataDescriptionResponse(
+        state.historyActionList, list, state.dataInformation));
+  }
 }

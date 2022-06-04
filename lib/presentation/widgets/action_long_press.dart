@@ -23,12 +23,14 @@ class ActionLongPress {
           ListTile(
             title: const Text('Описание'),
             onTap: () {
-              onNavigationDataDescription(context);
+              _onNavigationDataDescription(context);
             },
           ),
           ListTile(
             title: const Text('Поделиться данными'),
-            onTap: () {},
+            onTap: () {
+              _onNavigationAddShareUser(context);
+            },
           ),
           ListTile(
             title: const Text('Удалить'),
@@ -46,7 +48,7 @@ class ActionLongPress {
     );
   }
 
-  onNavigationDataDescription(BuildContext context) {
+  _onNavigationDataDescription(BuildContext context) {
     switch (typeTable) {
       case TypeTable.notes:
         {
@@ -62,7 +64,18 @@ class ActionLongPress {
           break;
         }
       case TypeTable.files:
-        break;
+        {
+          Navigator.pop(context);
+          Navigator.pushNamed(
+            context,
+            UrlPage.dataDescription,
+            arguments: [
+              id,
+              TypeTable.files,
+            ],
+          );
+          break;
+        }
       case TypeTable.account:
         {
           Navigator.pop(context);
@@ -105,5 +118,48 @@ class ActionLongPress {
       content: const Text(
           "Вы действительно хотите \n переместить данные в корзину?"),
     );
+  }
+
+  _onNavigationAddShareUser(BuildContext context) {
+    switch (typeTable) {
+      case TypeTable.notes:
+        {
+          Navigator.pushNamed(
+            context,
+            UrlPage.addUserShare,
+            arguments: [
+              TypeTable.notes,
+              id,
+            ],
+          );
+          break;
+        }
+      case TypeTable.files:
+        {
+          Navigator.pushNamed(
+            context,
+            UrlPage.addUserShare,
+            arguments: [
+              TypeTable.files,
+              id,
+            ],
+          );
+          break;
+        }
+      case TypeTable.account:
+        {
+          Navigator.pushNamed(
+            context,
+            UrlPage.addUserShare,
+            arguments: [
+              TypeTable.account,
+              id,
+            ],
+          );
+          break;
+        }
+      case TypeTable.data:
+        break;
+    }
   }
 }

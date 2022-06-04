@@ -58,7 +58,9 @@ class _SettingsState extends State<Settings> {
                           if (state is SettingsNewUserName) {
                             if (_formKeyUserName.currentState!.validate()) {}
                           }
-                          if (_formKeyLogin.currentState!.validate()) {}
+                          if (_formKeyLogin.currentState != null) {
+                            if (_formKeyLogin.currentState!.validate()) {}
+                          }
                         },
                         builder: (context, state) {
                           return Form(
@@ -152,7 +154,10 @@ class _SettingsState extends State<Settings> {
                         Expanded(
                           child: BlocConsumer<SettingsCubit, SettingsState>(
                             listener: (context, state) {
-                              if (_formKeyPassword.currentState!.validate()) {}
+                              if (_formKeyPassword.currentState != null) {
+                                if (_formKeyPassword.currentState!
+                                    .validate()) {}
+                              }
                             },
                             builder: (context, state) {
                               return ElevatedButton(
@@ -178,6 +183,76 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
             ),
+            BlocBuilder<SettingsCubit, SettingsState>(
+              builder: (context, state) {
+                return Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Хранилище',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.black),
+                              ),
+                              const SizedBox(height: 2.5),
+                              Row(
+                                // mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text('Кэш PassManager'),
+                                  Container(
+                                    height: 10,
+                                    width: 15,
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      width: 5,
+                                      height: 5,
+                                    ),
+                                  ),
+                                  Text(
+                                    context.read<SettingsCubit>().size,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Divider(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          context.read<SettingsCubit>().deleteFile();
+                        },
+                        child: const SizedBox(
+                          width: double.infinity,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              'Очистить кэш PassManager',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),

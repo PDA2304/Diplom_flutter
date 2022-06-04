@@ -12,6 +12,7 @@ import 'package:passmanager_diplom/data/api/model/api_history_action_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes.dart';
 import 'package:passmanager_diplom/data/api/model/api_notes_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_user.dart';
+import 'package:passmanager_diplom/data/api/model/api_user_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_user_share.dart';
 import 'package:passmanager_diplom/data/api/model/api_user_share_list.dart';
 import 'package:passmanager_diplom/data/api/model/api_validatio_new_user_name.dart';
@@ -19,6 +20,7 @@ import 'package:passmanager_diplom/data/api/model/api_validation_new_login.dart'
 import 'package:passmanager_diplom/data/api/model/api_validation_new_password.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_account_update.dart';
+import 'package:passmanager_diplom/data/api/request/request_add_share_user.dart';
 import 'package:passmanager_diplom/data/api/request/request_confirmation.dart';
 import 'package:passmanager_diplom/data/api/request/request_file_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_file_update.dart';
@@ -26,6 +28,8 @@ import 'package:passmanager_diplom/data/api/request/request_history_action.dart'
 import 'package:passmanager_diplom/data/api/request/request_new_login.dart';
 import 'package:passmanager_diplom/data/api/request/request_new_password.dart';
 import 'package:passmanager_diplom/data/api/request/request_new_user_name.dart';
+import 'package:passmanager_diplom/data/api/request/request_remove_share_user.dart';
+import 'package:passmanager_diplom/data/api/request/request_search_user.dart';
 import 'package:passmanager_diplom/data/api/request/request_trash_list.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_create.dart';
 import 'package:passmanager_diplom/data/api/request/request_notes_update.dart';
@@ -33,9 +37,8 @@ import 'package:passmanager_diplom/data/api/request/request_sing_in.dart';
 import 'package:passmanager_diplom/data/api/request/request_sing_up.dart';
 
 class SunriseService {
-   static const _BASE_URL = 'http://192.168.157.128:8888/api/'; //Local
+  static const _BASE_URL = 'http://192.168.157.128:8888/api/'; //Local
   //  static const _BASE_URL = 'http://89.208.210.91:8888/api/'; //Server
-  
 
   final Dio _dio = Dio(BaseOptions(
       baseUrl: _BASE_URL, connectTimeout: 10000, receiveTimeout: 10000));
@@ -348,6 +351,33 @@ class SunriseService {
       return true;
     } on DioError catch (e) {
       print(e.message);
+      return false;
+    }
+  }
+
+  Future<List<ApiUser>> searchUser(RequestSearchUser request) async {
+    try {
+      final response = await _dio.post('userSearch', data: request.toApi());
+      return ApiUserList.fromApi(response.data).list;
+    } on DioError catch (e) {
+      return <ApiUser>[];
+    }
+  }
+
+  Future<bool> addShareUser(RequestAddShareUser request) async {
+    try {
+      final response = await _dio.post('share/add/', data: request.toApi());
+      return true;
+    } on DioError catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> removeShareUser(RequestRemoveShareUser request) async {
+    try {
+      final response = await _dio.delete('share/remove', data: request.toApi());
+      return true;
+    } on DioError catch (e) {
       return false;
     }
   }

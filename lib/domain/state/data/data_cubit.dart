@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:passmanager_diplom/constant/type_table.dart';
@@ -13,6 +15,7 @@ import 'package:passmanager_diplom/domain/repository/crud_files_repository.dart'
 import 'package:passmanager_diplom/domain/repository/crud_notes_repository.dart';
 import 'package:passmanager_diplom/domain/repository/data_repository.dart';
 import 'package:passmanager_diplom/internal/dependencies/repository_module.dart';
+import 'package:path_provider/path_provider.dart';
 
 part 'data_state.dart';
 
@@ -159,8 +162,18 @@ class DataCubit extends Cubit<DataState> {
     isInit = false;
     _notesList.clear();
     _dataList.clear();
+    _filesList.clear();
     _accountList.clear();
     RepositoryModule.crudRepository().delete();
+    deleteFile();
+  }
+
+  void deleteFile() async {
+    var documentDirectory = await getApplicationDocumentsDirectory();
+    var dir = Directory("${documentDirectory.path}/PassManager");
+    if (dir.existsSync()) {
+      dir.deleteSync(recursive: true);
+    }
   }
 
   void onDelete(TypeTable typeTable, int id) {
@@ -205,25 +218,40 @@ class DataCubit extends Cubit<DataState> {
       case TypeTable.notes:
         {
           _notesList.clear();
+          _dataList.clear();
+          _dataList.addAll(await dataRepository.index(userId: userId));
           _notesList.addAll(await crudNotesRepository.index(userId: userId));
           break;
         }
       case TypeTable.files:
         {
           _filesList.clear();
+          _dataList.clear();
+          _dataList.addAll(await dataRepository.index(userId: userId));
           _filesList.addAll(await crudFilesRepository.index(userId: userId));
           break;
         }
       case TypeTable.account:
         {
           _accountList.clear();
+          _dataList.clear();
+          _dataList.addAll(await dataRepository.index(userId: userId));
           _accountList
               .addAll(await crudAccountRepository.index(userId: userId));
+
           break;
         }
       case TypeTable.data:
         {
           _dataList.clear();
+          _accountList.clear();
+          _filesList.clear();
+          _notesList.clear();
+
+          _notesList.addAll(await crudNotesRepository.index(userId: userId));
+          _filesList.addAll(await crudFilesRepository.index(userId: userId));
+          _accountList
+              .addAll(await crudAccountRepository.index(userId: userId));
           _dataList.addAll(await dataRepository.index(userId: userId));
         }
     }

@@ -1,7 +1,8 @@
-import 'package:meta/meta.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:equatable/equatable.dart';
 import 'package:passmanager_diplom/domain/model/validation_auth.dart';
 
-class User {
+class User extends Equatable {
   final int id;
   final String userName;
   final String email;
@@ -13,4 +14,7 @@ class User {
     required this.email,
     required this.validationAuth,
   });
+
+  @override
+  List<Object> get props => [id, userName, email];
 }
